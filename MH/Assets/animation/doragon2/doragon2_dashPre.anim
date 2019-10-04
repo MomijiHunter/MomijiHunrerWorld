@@ -1540,16 +1540,16 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.25
+    functionName: InstantEffect_setParent
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.25
     functionName: SetDashModeFront
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 32
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.25
-    functionName: InstantAnim_setParent
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
     intParameter: 0
     messageOptions: 0

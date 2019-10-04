@@ -521,12 +521,9 @@ MonoBehaviour:
   rb: {fileID: 397582298}
   MaxHP: 30
   currentHP: 30
+  stateLog: 0
+  nonActive: 0
   detectState: 1
-  eyeCheckArea: {fileID: 2138852716}
-  eyeCheckArea_canHide: {fileID: 9087765736175917546}
-  detectCheckArea: {fileID: 176517911}
-  myMomiji: {fileID: 3109581259763231660}
-  moveSpeed: 10
   footCollider: {fileID: 496956693}
   effectPos: {fileID: 7157137040105620052}
   effects:
@@ -537,15 +534,20 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1cd0ead6129fa934c8acd154f5636aec, type: 3}
   - {fileID: 8300000, guid: 9a88f96648bcd72488571cddd5a26ad1, type: 3}
   - {fileID: 8300000, guid: 1f04717986ea85d4f9d578ffa37e2733, type: 3}
-  nonActive: 0
-  stateLog: 0
-  chengeAreaEnable: 0
+  eyeCheckArea: {fileID: 2138852716}
+  eyeCheckArea_canHide: {fileID: 9087765736175917546}
+  detectCheckArea: {fileID: 176517911}
+  myMomiji: {fileID: 3109581259763231660}
   deadItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
     type: 3}
   dropPos: {fileID: 7564868651669886469}
+  moveSpeed: 10
+  chengeAreaEnable: 0
+  nowMapName: 
   preDetectLength: 10
-  nextChengeLength: -1
+  nextChengeLengthArea: {x: -1, y: 0}
   nextLordObj: {fileID: 0}
+  upPlTime: 0
   attackMode: 0
   aiStateNum_walk_ud: 60
   aiStateNum_wait_ud: 20
@@ -780,7 +782,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8931630192971524373}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.5, y: 6.93, z: 0}
+  m_LocalPosition: {x: -1.54, y: 2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4574834742324233541}

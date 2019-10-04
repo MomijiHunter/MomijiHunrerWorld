@@ -21,6 +21,8 @@ namespace aojilu
         [SerializeField] float aiStateFrontPl_jump;
         [SerializeField] float aiStateFrontPl_fire;
 
+        [SerializeField] float aiStateOther_upFire;//特殊状況の時に呼ばれる可能性
+
         float? randFixed = null;
 
         int counter;
@@ -28,6 +30,7 @@ namespace aojilu
         Vector2? nowTargetPos = null;
 
         [SerializeField] animationUtil fire;
+        [SerializeField] Fire_sorairo_bunretu fireBunretu;
         [SerializeField] Vector2 fireVector;
         [SerializeField] float fireLength;
 
@@ -65,13 +68,13 @@ namespace aojilu
                         rand = Random.Range(0, 100);
                         nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                     }
-                    if (MoveToTarget(5.0f,(Vector2) nowTargetPos, moveSpeed * 0.5f))
+                    if (MoveToTarget_X(5.0f,(Vector2) nowTargetPos, moveSpeed * 0.5f))
                     {
                         SetAIState(AISTATE.WAIT, 2.0f);
                     }
                     break;
                 case AISTATE.MAPCHENGE:
-                    MoveToTarget(1.0f, (Vector2)nextLordObj.transform.position, moveSpeed);
+                    MoveToTarget_X(1.0f, (Vector2)nextLordObj.transform.position, moveSpeed);
                     break;
             }
         }
@@ -106,20 +109,46 @@ namespace aojilu
                     }
                     break;
                 case AISTATE.APPROACH_WALK:
-                    if (MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
+                    if (UpPlTime > 5.0f)
+                    {
+                        if (MoveToPlayer_X(1.0f, moveSpeed*0.5f))
+                        {
+                            SetAIState(AISTATE.ATTACK, 4.0f);
+                        }
+                    }
+                    else if (MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
                     {
                         SetAIState(AISTATE.ATTACK, 4.0f);
                     }
                     break;
                 case AISTATE.APPROACH_DASH:
-                    if (MoveToPlayer_X(10.0f, moveSpeed))
+                    if (UpPlTime > 5.0f)
+                    {
+                        if(MoveToPlayer_X(1.0f, moveSpeed))
+                        {
+                            SetAIState(AISTATE.ATTACK, 4.0f);
+                        }
+                    }
+                    else if (MoveToPlayer_X(10.0f, moveSpeed))
                     {
                         SetAIState(AISTATE.ATTACK, 4.0f);
                     }
                     break;
                 case AISTATE.ATTACK:
                     if (stateInfo.IsTag("attack")&&randFixed==null) SetAIState(AISTATE.AISELECT,1.0f);
-                    if (rand < aiStateFrontPl_dash)
+
+                    if (UpPlTime>5.0f&& rand<aiStateOther_upFire)
+                    {
+                        if (GetDistancePlayer_X() > 2.0f)
+                        {
+                            SetAIState(AISTATE.APPROACH_DASH, 3.0f);
+                            break;
+                        }
+                        animator.SetTrigger("attack5");
+                        SetAIState(AISTATE.WAIT, 5.0f);
+                        ResetUpPlTime();
+                    }
+                    else if (rand < aiStateFrontPl_dash)
                     {
                         Attack2();
                     }else if (rand < aiStateFrontPl_dash + aiStateFrontPl_head)
@@ -198,6 +227,11 @@ namespace aojilu
             vec.x *= Mathf.Sign(-transform.localScale.x);
             obj.SetVelocity(vec);
             obj.SetDedLength(fireLength);
+        }
+
+        public void FireCreate_buntetu()
+        {
+            Instantiate(fireBunretu, effectPos.position, Quaternion.identity);
         }
     }
 }

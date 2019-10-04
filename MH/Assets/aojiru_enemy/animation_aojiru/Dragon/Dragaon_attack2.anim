@@ -2648,7 +2648,7 @@ AnimationClip:
     intParameter: 2
     messageOptions: 0
   - time: 1.9166666
-    functionName: InstantAnim_setParent
+    functionName: InstantEffect_setParent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 2049185829587313490}
   m_Layer: 0
   m_Name: eye
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -541,12 +541,9 @@ MonoBehaviour:
   rb: {fileID: 2049185830666200025}
   MaxHP: 30
   currentHP: 30
+  stateLog: 0
+  nonActive: 0
   detectState: 1
-  eyeCheckArea: {fileID: 2049185829587313489}
-  eyeCheckArea_canHide: {fileID: 5312414064798229788}
-  detectCheckArea: {fileID: 2049185829344070312}
-  myMomiji: {fileID: 6435670112610077251}
-  moveSpeed: 25
   footCollider: {fileID: 2049185830477375875}
   effectPos: {fileID: 4924705914781689097}
   effects:
@@ -560,15 +557,20 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9a88f96648bcd72488571cddd5a26ad1, type: 3}
   - {fileID: 8300000, guid: fe5ac8b3a2accfe4489a9e209076a330, type: 3}
   - {fileID: 8300000, guid: 1f04717986ea85d4f9d578ffa37e2733, type: 3}
-  nonActive: 0
-  stateLog: 0
-  chengeAreaEnable: 0
+  eyeCheckArea: {fileID: 2049185829587313489}
+  eyeCheckArea_canHide: {fileID: 5312414064798229788}
+  detectCheckArea: {fileID: 2049185829344070312}
+  myMomiji: {fileID: 6435670112610077251}
   deadItem: {fileID: 3247650347448752549, guid: 3822ce19eb6ef0d4ab2c57e05b617580,
     type: 3}
   dropPos: {fileID: 8076564687806275684}
+  moveSpeed: 16
+  chengeAreaEnable: 0
+  nowMapName: 
   preDetectLength: 60
-  nextChengeLength: 90
+  nextChengeLengthArea: {x: 60, y: 120}
   nextLordObj: {fileID: 0}
+  upPlTime: 0
   aiStateNum_walk_ud: 60
   aiStateNum_wait_ud: 20
   aiStateNum_rest_ud: 20
@@ -580,7 +582,10 @@ MonoBehaviour:
   aiStateFrontPl_tail: 20
   aiStateFrontPl_jump: 20
   aiStateFrontPl_fire: 20
+  aiStateOther_upFire: 40
   fire: {fileID: -9128362477977420605, guid: 0cdab5fa1aed5604f9e6f4c107b16326, type: 3}
+  fireBunretu: {fileID: 125151666687077087, guid: 62b6cf805d17a934d8781a11a80491f4,
+    type: 3}
   fireVector: {x: 10, y: -3}
   fireLength: 5
 --- !u!95 &2049185830666200027
@@ -752,7 +757,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2705641078516711639}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.38, y: 8.71, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2049185830666200024}
