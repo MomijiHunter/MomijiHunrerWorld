@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace aojilu
 {
-    public class PlCheckArea : MonoBehaviour
+    public class TagCheckArea : MonoBehaviour
     {
         [SerializeField] bool internalTarget;
         public bool InternalTarget { get { return internalTarget; } }

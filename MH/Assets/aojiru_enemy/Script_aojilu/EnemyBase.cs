@@ -8,16 +8,19 @@ namespace aojilu
 {
     public class EnemyBase : CharBase
     {
+        #region Debug
+
+        [SerializeField] bool stateLog;//AIstateのログを出す
+        [SerializeField] bool nonActive;//処理の停止
+        #endregion
+
         public enum DETECTSTATE
         {
             DETECT,UNDETECT
         }
         [SerializeField]protected DETECTSTATE detectState=DETECTSTATE.UNDETECT;
         public DETECTSTATE DetectState { get { return detectState; } }
-        [SerializeField] protected PlCheckArea eyeCheckArea;
-        [SerializeField] protected PlCheckArea eyeCheckArea_canHide;
-        [SerializeField] protected PlCheckArea detectCheckArea;
-        [SerializeField] MomijiAnim myMomiji;
+
 
         public enum AISTATE
         {
@@ -32,45 +35,62 @@ namespace aojilu
         protected AISTATE aiState;
         public AISTATE AiState { get { return aiState; } }
         
-
         float aiStartTime;//今のステイとになった時刻
         float aiWaitLength;//今のステイとを続ける時間
 
-        [SerializeField] protected float moveSpeed;
+        //現在使用しているAI関数のリスト
+        List<UnityAction> AIActionList = new List<UnityAction>();
+        int AIactionIndex;
 
         //=========================
         Player player;
         Transform tr;
         protected  Animator animator { get; private set; }
-        Transform plTr;
+        protected Transform plTr;
         AudioSource audioSource;
         protected AnimatorStateInfo stateInfo;
         [SerializeField] BoxCollider2D footCollider;
         [SerializeField] protected Transform effectPos;
         [SerializeField] GameObject[] effects;
         [SerializeField] AudioClip[] SEs;
-        //========================
-        float? dashModeSpeed=null;
-        public bool isGroundead { get; private set; }
-        [SerializeField] bool nonActive;
-        [SerializeField] bool stateLog;
-        [SerializeField] protected bool chengeAreaEnable;
-        public bool ChengeAreaEnable { get { return chengeAreaEnable; } }
 
-        List<UnityAction> AIActionList=new List<UnityAction>();
-        int AIactionIndex;
 
-        [SerializeField]protected  GameObject deadItem;
+        //発見エリア
+        [SerializeField] protected TagCheckArea eyeCheckArea;
+        [SerializeField] protected TagCheckArea eyeCheckArea_canHide;
+        [SerializeField] protected TagCheckArea detectCheckArea;
+
+        [SerializeField] MomijiAnim myMomiji;
+
+        //死んだ時の敵のアイテムドロップ関連
+        [SerializeField] protected GameObject deadItem;
         [SerializeField] protected Transform dropPos;
         int deadItemCount;
+        //========================
 
-        protected float preDetectTime;
-        [SerializeField]float preDetectLength;
+        [SerializeField] protected float moveSpeed;
+        float? dashModeSpeed=null;//nullじゃないなら、強制移動。アニメーションは別途
+        public bool isGroundead { get; private set; }
 
-        float mapChengeStartTime;
-        [SerializeField]float nextChengeLength;
-        [SerializeField]protected LoadObject nextLordObj;
+        [SerializeField] protected bool chengeAreaEnable;//マップ移動フラグ
+        public bool ChengeAreaEnable { get { return chengeAreaEnable; } }
 
+        [SerializeField] string nowMapName;//現在のマップ名
+
+        protected float preDetectTime;//最後に遭遇したタイミング
+        [SerializeField]float preDetectLength;//警戒状態が解かれるまでの時間
+        
+        float mapChengeStartTime;//前回移動した時間
+        [SerializeField] Vector2 nextChengeLengthArea;//次移動するまでの時間の最大値と最小値
+        float nextChengeLength;//次移動するまでの時間
+        [SerializeField]protected LoadObject nextLordObj;//次に移動する場所
+
+        #region 便利系
+        [SerializeField] float upPlTime;
+        protected float UpPlTime { get { return upPlTime; } }
+        #endregion
+
+        #region monoBehaviour
         protected override void Awake()
         {
             base.Awake();
@@ -79,7 +99,7 @@ namespace aojilu
 
         protected virtual void Init()
         {
-            player = GameObject.Find("PlayerAll").GetComponent<Player>();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             tr = transform;
             plTr = player.transform;
             animator = GetComponent<Animator>();
@@ -90,24 +110,30 @@ namespace aojilu
             mapChengeStartTime = Time.fixedTime;
             preDetectTime = -preDetectLength;
             audioSource = GetComponent<AudioSource>();
+
+            nextChengeLength = GetNextMapChengeTime();
+            if (nextLordObj != null)
+            {
+                SetNowMapName(nextLordObj.MyMapName);
+            }
         }
 
         protected override void CharacterUpdate()
         {
             if (nonActive||plTr==null) return;
 
-            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (IsDead())
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);//アニメーション情報の取得
+            if (IsDead())//死亡判定
             {
                 DeadAction();
                 return;
             }
-            ChengeMap();
+            SetChengeMapState();//マップ遷移するかの確認
             isGroundead = CheckGranudead();
-            CheckAction();
             animator.SetBool("isGrounded", isGroundead);
-            AIActionList[AIactionIndex].Invoke();
-
+            CheckAction();//発見処理
+            AIActionList[AIactionIndex].Invoke();//AI処理
+            UtilUpdate();
 
             if (dashModeSpeed != null)
             {
@@ -120,7 +146,49 @@ namespace aojilu
             }
         }
 
-        void ChengeMap()
+        #endregion
+        #region 便利変数
+
+        /// <summary>
+        /// 便利変数の更新処理
+        /// </summary>
+        void UtilUpdate()
+        {
+            UpPlTimeUpdate();
+        }
+
+        /// <summary>
+        /// プレイヤーが自分より高い位置にいる時間を計測
+        /// </summary>
+        void UpPlTimeUpdate()
+        {
+            if (detectState == DETECTSTATE.DETECT)
+            {
+                if (IsTargetUpSelf(4.0f, plTr))
+                {
+                    upPlTime += Time.deltaTime;
+                }
+                else
+                {
+                    upPlTime = 0;
+                }
+            }
+            else
+            {
+                upPlTime = 0;
+            }
+        }
+
+        protected void ResetUpPlTime()
+        {
+            upPlTime = 0; ;
+        }
+        #endregion
+        #region mapの移動関連
+        /// <summary>
+        /// 既定の時間が過ぎていたら移動フラグを立てる
+        /// </summary>
+        void SetChengeMapState()
         {
             if (nextChengeLength < 0) return;
             if (Time.fixedTime > mapChengeStartTime + nextChengeLength)
@@ -133,23 +201,69 @@ namespace aojilu
             }
         }
 
+        /// <summary>
+        /// 移動した際の次に移動する場所の設定、移動したときに呼ばれる
+        /// </summary>
+        /// <param name="obj"></param>
         public void SetChengeMapData(LoadObject obj)
         {
             nextLordObj = obj;
             mapChengeStartTime = Time.fixedTime;
             SetAIState(AISTATE.AISELECT, 1.0f);
             chengeAreaEnable = false;
+
+            nextChengeLength = GetNextMapChengeTime();
+            SetNowMapName(obj.MyMapName);
         }
 
-        bool CheckGranudead()
+
+        /// <summary>
+        /// 次に移動するまでの時間の取得
+        /// </summary>
+        /// <returns></returns>
+        float GetNextMapChengeTime()
         {
-            Collider2D[] cols = Physics2D.OverlapBoxAll(footCollider.transform.position, footCollider.size,0);
-            foreach(var obj in cols)
-            {
-                if (obj.tag == "Ground") return true;
-            }
-            return false;
+            return Random.Range(nextChengeLengthArea.x, nextChengeLengthArea.y);
         }
+
+        /// <summary>
+        /// 現在いるマップの名前の設定
+        /// </summary>
+        /// <param name="s"></param>
+        void SetNowMapName(string s)
+        {
+            nowMapName = s;
+        }
+        #endregion
+
+        #region AI
+
+        /// <summary>
+        /// aiStateの変更
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="t"></param>
+        protected void SetAIState(AISTATE state, float t)
+        {
+            aiStartTime = Time.fixedTime;
+            aiWaitLength = t;
+            aiState = state;
+            if (stateLog)
+            {
+                Debug.Log(state);
+            }
+        }
+        
+        /// <summary>
+        /// aistateの時間の延長
+        /// </summary>
+        /// <param name="t"></param>
+        protected void ExtendStateTime(float t)
+        {
+            aiStartTime = Time.fixedTime;
+            aiWaitLength = t;
+        }
+
         /// <summary>
         /// aiの内部処理。子で実装
         /// </summary>
@@ -162,6 +276,9 @@ namespace aojilu
             }
         }
 
+        /// <summary>
+        /// 未発見時のai
+        /// </summary>
         protected virtual void AIAction_undetect()
         {
             if (Time.fixedTime > aiStartTime + aiWaitLength)
@@ -170,12 +287,12 @@ namespace aojilu
                 SetAIState(AISTATE.AISELECT, 1.0f);
             }
         }
-        
         protected void SetAIIndex(int i)
         {
             AIactionIndex = i;
         }
-
+        #endregion
+        #region 死亡時など特定の状況で呼ばれる関数
         /// <summary>
         /// 死んだときのアクション
         /// </summary>
@@ -186,6 +303,9 @@ namespace aojilu
             myMomiji.BreakMomiji();
         }
 
+        /// <summary>
+        /// 死亡時のアイテム生成
+        /// </summary>
         protected virtual void MakeDeadItem()
         {
             if (deadItemCount != 0||deadItem==null) return;
@@ -193,9 +313,31 @@ namespace aojilu
             deadItemCount++;
         }
 
+        public void DamageAction(int damage)
+        {
+            Damage(damage);
+            animator.SetTrigger("damage");
+            if (detectState == DETECTSTATE.UNDETECT)
+            {
+                DamageDetectAction();
+                animator.SetTrigger("detect");
+            }
+        }
+
+        /// <summary>
+        /// 敵を未発見でダメージを受けた場合
+        /// </summary>
+        protected virtual void DamageDetectAction()
+        {
+            detectState = DETECTSTATE.DETECT;
+        }
+        #endregion
+        /// <summary>
+        /// detectの変更
+        /// </summary>
         protected virtual void CheckAction()
         {
-            if (Time.fixedTime < preDetectTime + preDetectLength)
+            if (Time.fixedTime < preDetectTime + preDetectLength)//発見状態から経過時間が短い場合すぐに気が付く
             {
                 if (detectState == DETECTSTATE.UNDETECT)
                 {
@@ -231,32 +373,16 @@ namespace aojilu
             }
         }
 
-        /// <summary>
-        /// aiStateの変更
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="t"></param>
-        protected void SetAIState(AISTATE state, float t)
-        {
-            aiStartTime = Time.fixedTime;
-            aiWaitLength = t;
-            aiState = state;
-            /*if (stateLog)
-            {
-                Debug.Log(state);
-            }*/
-        }
-
-        protected void ExtendStateTime(float t)
-        {
-            aiStartTime = Time.fixedTime;
-            aiWaitLength = t;
-        }
-        
+        #region 動作関連
         protected override void Move(float speed)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
             animator.SetFloat("move", Mathf.Abs( speed / moveSpeed));
+        }
+
+        protected void StopMove()
+        {
+            Move(0);
         }
 
         /// <summary>
@@ -280,6 +406,7 @@ namespace aojilu
                 tr.localScale = new Vector2(tr.localScale.x * -1, tr.localScale.y);
             }
         }
+
         public bool MoveToPlayer_X(float distance_target, float speed, bool isEscape = false)
         {
             float distance =GetDistancePlayer_X();
@@ -300,7 +427,7 @@ namespace aojilu
             }
         }
 
-        public bool MoveToTarget(float distanceTarget,Vector2 targetPos,float speed)
+        public bool MoveToTarget_X(float distanceTarget,Vector2 targetPos,float speed)
         {
             float distance = Mathf.Abs( targetPos.x - tr.position.x);
             if (distance < distanceTarget)
@@ -323,9 +450,15 @@ namespace aojilu
             return Mathf.Abs(plTr.position.x - tr.position.x);
         }
 
-        protected void StopMove()
+        #region Check系
+        bool CheckGranudead()
         {
-            Move(0);
+            Collider2D[] cols = Physics2D.OverlapBoxAll(footCollider.transform.position, footCollider.size, 0);
+            foreach (var obj in cols)
+            {
+                if (obj.tag == "Ground") return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -353,25 +486,23 @@ namespace aojilu
             }
         }
 
-        public void DamageAction(int damage)
-        {
-            Damage(damage);
-            animator.SetTrigger("damage");
-            if (detectState == DETECTSTATE.UNDETECT)
-            {
-                DamageDetectAction();
-                animator.SetTrigger("detect");
-            }
-        }
-
         /// <summary>
-        /// 敵を未発見でダメージを受けた場合
+        /// lengthよりターゲットが高い位置にいるか
         /// </summary>
-        protected virtual void DamageDetectAction()
+        /// <param name="length"></param>
+        /// <param name="_targetTr"></param>
+        /// <returns></returns>
+        public bool IsTargetUpSelf(float length,Transform _targetTr)
         {
-            detectState = DETECTSTATE.DETECT;
+            return (_targetTr.position.y - tr.position.y) > length;
         }
-
+        #endregion
+        #endregion
+        #region アニメーション系
+        /// <summary>
+        /// 攻撃アニメーションを終了するためのフラグをonにする
+        /// 攻撃アニメーションの最後に呼ぶ
+        /// </summary>
         public void AttackEnd()
         {
             animator.SetBool("attackEnd",true);
@@ -380,9 +511,14 @@ namespace aojilu
             SetAIState(AISTATE.WAIT, 1.0f);
         }
 
+        /// <summary>
+        /// AttackEndを呼ぶまでの時間を設定する。
+        /// ダッシュなどのループする攻撃で使用
+        /// </summary>
+        /// <param name="time"></param>
         public void SetAttackEnd(float time)
         {
-            StartCoroutine( WaitTime(time, () => AttackEnd()));
+            StartCoroutine( WaitTimeAction(time, () => AttackEnd()));
         }
 
         public void SetDashModeFront(float speed)
@@ -390,19 +526,20 @@ namespace aojilu
             dashModeSpeed = speed*Mathf.Sign(-tr.localScale.x);
         }
 
-         protected IEnumerator WaitTime(float f, UnityAction ua)
-        {
-            yield return new WaitForSeconds(f);
-            ua.Invoke();
-        }
 
-        public void InstantAnim_setParent(int i)
+        /// <summary>
+        /// 自分の子としてエフェクトを作成
+        /// </summary>
+        /// <param name="i"></param>
+        public void InstantEffect_setParent(int i)
         {
             GameObject obj = Instantiate(effects[i], effectPos.position, Quaternion.identity);
-            obj.transform.localScale *= Mathf.Sign(tr.localScale.x);
+            var scale = obj.transform.localScale;
+            scale.x*= Mathf.Sign(tr.localScale.x);
+            obj.transform.localScale = scale;
             obj.transform.SetParent(effectPos);
         }
-        public void InstantAnim(int i)
+        public void InstantEffect(int i)
         {
             GameObject obj = Instantiate(effects[i], effectPos.position, Quaternion.identity);
             var scale = obj.transform.localScale;
@@ -410,6 +547,9 @@ namespace aojilu
             obj.transform.localScale = scale;
         }
 
+        /// <summary>
+        /// 保持しているエフェクトアニメーションの破壊
+        /// </summary>
         public void BreakAnim()
         {
             foreach(Transform obj in effectPos)
@@ -417,15 +557,32 @@ namespace aojilu
                 Destroy(obj.gameObject);
             }
         }
-
+        /// <summary>
+        /// 指定時間後に破壊
+        /// </summary>
+        /// <param name="f"></param>
         public void BreakAnim_setTime(float f)
         {
-            StartCoroutine(WaitTime(f, () => BreakAnim()));
+            StartCoroutine(WaitTimeAction(f, () => BreakAnim()));
         }
 
         public void PlaySE_oneShot(int i)
         {
             audioSource.PlayOneShot(SEs[i]);
         }
+        #endregion
+
+        /// <summary>
+        /// 指定時間後に関数を実行
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="ua"></param>
+        /// <returns></returns>
+        protected IEnumerator WaitTimeAction(float f, UnityAction ua)
+        {
+            yield return new WaitForSeconds(f);
+            ua.Invoke();
+        }
+
     }
 }
