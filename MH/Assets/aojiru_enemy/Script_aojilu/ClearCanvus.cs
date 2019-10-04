@@ -25,13 +25,9 @@ namespace aojilu
 
         Animator animator;
 
-        AudioSource au;
-
         private void Start()
         {
             animator = GetComponent<Animator>();
-
-            au = GetComponent<AudioSource>();
         }
 
         private void Update()
@@ -84,11 +80,6 @@ namespace aojilu
                 if (obj.currentHP > 0) flag = false;
             }
             return flag;
-        }
-
-        void StampSound()
-        {
-            au.Play();
         }
     }
 }

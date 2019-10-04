@@ -17,16 +17,6 @@ public class LoadCtrl : MonoBehaviour
 
     Dictionary<string,UnityAction>  blackActionList=new Dictionary<string, UnityAction>();
 
-    Transform cm;
-    Transform player;
-
-    private void Start()
-    {
-
-        cm = GameObject.Find("PlayerCamera").transform;
-        player = GameObject.Find("PlayerAll").transform;
-    }
-
     private void Update()
     {
         switch (fadeState)
@@ -76,8 +66,6 @@ public class LoadCtrl : MonoBehaviour
             act.Value.Invoke();
         }
         blackActionList = new Dictionary<string, UnityAction>();
-        cm.position = player.position;
-
     }
 
     public void AddBlackAction(string key,UnityAction action)

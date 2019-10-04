@@ -43,7 +43,7 @@ namespace aojilu
         {
             base.DeadAction();
             if (stateInfo.IsTag("Dead")) return;
-            StartCoroutine(WaitTime(10.0f,() => Destroy(this.gameObject)));
+            StartCoroutine(WaitTimeAction(10.0f,() => Destroy(this.gameObject)));
             MakeDeadItem();
         }
 
@@ -75,7 +75,7 @@ namespace aojilu
                         rand = Random.Range(0, 100);
                         nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                     }
-                    if (MoveToTarget(5.0f, (Vector2)nowTargetPos, moveSpeed * 0.5f))
+                    if (MoveToTarget_X(5.0f, (Vector2)nowTargetPos, moveSpeed * 0.5f))
                     {
                         SetAIState(AISTATE.WAIT, 2.0f);
                     }

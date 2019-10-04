@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 
 namespace aojilu {
     public class LoadObject : MonoBehaviour
@@ -13,16 +12,12 @@ namespace aojilu {
         [SerializeField] LoadObject chengeTarget;
         [SerializeField] LoadObject[] nextObj;
 
-        CinemachineVirtualCamera cm;
+        [SerializeField] GameObject myMap;
+        public string MyMapName { get { return myMap.name; } }
 
         private void Awake()
         {
             load = GameObject.FindGameObjectWithTag("LoadPanel").GetComponent<LoadCtrl>();
-        }
-
-        private void Start()
-        {
-            cm = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
         }
 
 
@@ -33,7 +28,6 @@ namespace aojilu {
             {
                 var plTr = col.transform;
                 load.AddBlackAction("Load", () => ChengeToTarget(plTr));
-                load.AddBlackAction("Load2", () => StartCoroutine(MoveCameraOnLoad()));
                 load.FadeAction();
             }
         }
@@ -60,15 +54,6 @@ namespace aojilu {
         {
             int r = (int)Random.Range(0, nextObj.Length);
             return nextObj[r];
-        }
-
-        IEnumerator MoveCameraOnLoad()
-        {
-            cm.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
-            cm.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
-            yield return new WaitForSeconds(0.1f);
-            cm.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
-            cm.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3.3f;
         }
     }
 }
