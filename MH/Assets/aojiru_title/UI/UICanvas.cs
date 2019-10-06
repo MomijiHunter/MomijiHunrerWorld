@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UICanvas : MonoBehaviour
 {
@@ -10,31 +11,55 @@ public class UICanvas : MonoBehaviour
         SLEEP,AWAKE,NONE,END
     }
     [SerializeField] State state;
+    public State StateMode { get { return state; } }
 
     Canvas myCanvas;
-    UIListCtrl uictrl;
-
+    protected UIListCtrl uictrl { get; private set; }
+    [SerializeField] bool inverseY;
     [SerializeField] List<int> indexRangeList;
+    [SerializeField] List<UI_selectComponentBase> selectList_inspector;
+    List<List<UI_selectComponentBase>> selectList_use=new List<List<UI_selectComponentBase>>();
+
     [SerializeField]Vector2Int index_now;
+    
     Vector2Int index_before;
 
     float beforeInputTime;
-    
+
+    public int sortOrder { get {return myCanvas.sortingOrder; } }
+
+
+    private void Awake()
+    {
+
+        myCanvas = GetComponent<Canvas>();
+    }
 
     void Start()
     {
-        myCanvas = GetComponent<Canvas>();
         uictrl = GetComponentInParent<UIListCtrl>();
+
+        SetSelectComponentList();
     }
 
     private void Update()
     {
+        StateUpdate();
         if (CheckInputEnable())
         {
             if (InputVertical()) ;
             else if (InputHorizontal()) ;
             else if (InputSubmit()) SubmitAction();
+            else if (InputCancel()) CancelAction();
+
+            IndexUpdate();
         }
+    }
+
+    void IndexUpdate()
+    {
+        selectList_use[index_before.x][index_before.y].SelectOff();
+        selectList_use[index_now.x][index_now.y].SelectOn();
     }
 
     bool CheckInputEnable()
@@ -48,6 +73,11 @@ public class UICanvas : MonoBehaviour
     protected virtual void SubmitAction()
     {
         Debug.Log("submit");
+    }
+
+    protected virtual void CancelAction()
+    {
+        Debug.Log("cancel");
     }
     #region input
     int GetInputAxisInt(float f)
@@ -71,13 +101,21 @@ public class UICanvas : MonoBehaviour
     {
         var i = GetInputAxisInt(Input.GetAxis("Vertical"));
         if (i == 0) return false;
-        AddIndex(0, i);
+        AddIndex(0, (inverseY)? -i:i);
         return true;
     }
 
     protected virtual bool InputSubmit()
     {
         if (Input.GetButtonDown("Submit"))
+        {
+            return true;
+        }
+        return false;
+    }
+    protected virtual bool InputCancel()
+    {
+        if (Input.GetButtonDown("Cancel"))
         {
             return true;
         }
@@ -136,6 +174,73 @@ public class UICanvas : MonoBehaviour
     #endregion
     public void SetSortOrder(int sortOrder)
     {
+        if (myCanvas == null) myCanvas = GetComponent<Canvas>();
         myCanvas.sortingOrder = sortOrder;
     }
+
+    void SetSelectComponentList()
+    {
+        if (selectList_inspector.Count == 0) return;
+        for(int i = 0; i < selectList_inspector.Count; i++)
+        {
+            if (i < indexRangeList.Count)
+            {
+                selectList_use.Add(new List<UI_selectComponentBase>());
+            }
+            int _index = i % (indexRangeList.Count);
+            selectList_use[_index].Add(selectList_inspector[i]);
+        }
+    }
+
+
+    #region state
+    void StateUpdate()
+    {
+        switch (state)
+        {
+            case State.AWAKE:
+                
+                SetState(State.NONE);
+                break;
+            case State.NONE:
+                break;
+            case State.END:
+                SetState(State.SLEEP);
+                gameObject.SetActive(false);
+                break;
+            case State.SLEEP:
+                break;
+        }
+    }
+
+    void SetState(State st)
+    {
+        state = st;
+    }
+    
+
+    public void SetStateSleep()
+    {
+        SetState(State.SLEEP);
+    }
+
+    public void SetStateEnd()
+    {
+        SetState(State.END);
+    }
+
+    public void SetStateAwake()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            SetState(State.NONE);
+        }
+        else
+        {
+            SetState(State.AWAKE);
+            gameObject.SetActive(true);
+        }
+    }
+    
+    #endregion
 }
