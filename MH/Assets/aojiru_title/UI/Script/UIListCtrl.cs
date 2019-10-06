@@ -48,6 +48,7 @@ public class UIListCtrl : MonoBehaviour
             if (cv != null)
             {
                 UIList.Add(cv);
+                cv.SetMyUIIndex(UIList.Count-1);
             }
         }
     }

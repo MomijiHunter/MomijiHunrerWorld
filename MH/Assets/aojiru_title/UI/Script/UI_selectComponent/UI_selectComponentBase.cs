@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ボタンとかのベース
+/// </summary>
 public class UI_selectComponentBase : MonoBehaviour
 {
     [SerializeField] bool selectable;
