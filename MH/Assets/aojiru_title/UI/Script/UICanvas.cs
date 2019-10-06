@@ -19,6 +19,7 @@ public class UICanvas : MonoBehaviour
     [SerializeField] List<int> indexRangeList;
     [SerializeField] List<UI_selectComponentBase> selectList_inspector;
     List<List<UI_selectComponentBase>> selectList_use=new List<List<UI_selectComponentBase>>();
+    public UI_selectComponentBase nowSelectComponent { get { return selectList_use[index_now.x][index_now.y]; } }
 
     [SerializeField]Vector2Int index_now;
     
@@ -27,9 +28,10 @@ public class UICanvas : MonoBehaviour
     float beforeInputTime;
 
     public int sortOrder { get {return myCanvas.sortingOrder; } }
+    public int myUIIndex { get; private set; }//uiCtrlの呼び出し番号
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
 
         myCanvas = GetComponent<Canvas>();
@@ -58,6 +60,7 @@ public class UICanvas : MonoBehaviour
 
     void IndexUpdate()
     {
+        if (selectList_use.Count == 0) return;
         selectList_use[index_before.x][index_before.y].SelectOff();
         selectList_use[index_now.x][index_now.y].SelectOn();
     }
@@ -192,9 +195,18 @@ public class UICanvas : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// uiCtrlに登録されている番号の設定
+    /// </summary>
+    /// <param name="i"></param>
+    public void SetMyUIIndex(int i)
+    {
+        myUIIndex = i;
+    }
+
 
     #region state
-    void StateUpdate()
+    virtual protected void StateUpdate()
     {
         switch (state)
         {
@@ -213,23 +225,23 @@ public class UICanvas : MonoBehaviour
         }
     }
 
-    void SetState(State st)
+    protected void SetState(State st)
     {
         state = st;
     }
     
 
-    public void SetStateSleep()
+    public virtual void SetStateSleep()
     {
         SetState(State.SLEEP);
     }
 
-    public void SetStateEnd()
+    public virtual void SetStateEnd()
     {
         SetState(State.END);
     }
 
-    public void SetStateAwake()
+    public virtual void SetStateAwake()
     {
         if (gameObject.activeInHierarchy)
         {
