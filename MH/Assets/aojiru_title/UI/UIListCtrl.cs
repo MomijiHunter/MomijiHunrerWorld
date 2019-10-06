@@ -8,11 +8,36 @@ public class UIListCtrl : MonoBehaviour
 
     [SerializeField] UICanvas nowUICanvas;
     public UICanvas NowUICanvas { get { return nowUICanvas; } }
+    public UICanvas nextUICanvas { get; private set; }
+    [SerializeField] int firstUIIndex = -1;
 
     [SerializeField] float inputSensitive;
     public float InputSensitive { get { return inputSensitive; } }
     [SerializeField] float repeatDelay;
     public float RepeatDelay { get { return repeatDelay; } }
+
+    private void Start()
+    {
+        SetUIList();
+
+        if (firstUIIndex >= 0)
+        {
+            OpenUICanvas(firstUIIndex,10);
+        }
+    }
+
+    private void Update()
+    {
+        if (nextUICanvas != null)
+        {
+            if (nowUICanvas==null||nowUICanvas.StateMode == UICanvas.State.SLEEP)
+            {
+                SetNowUICanvas(nextUICanvas);
+                nextUICanvas.SetStateAwake();
+                nextUICanvas = null;
+            }
+        }
+    }
 
     void SetUIList()
     {
@@ -27,15 +52,37 @@ public class UIListCtrl : MonoBehaviour
         }
     }
 
-    public void SetNowUICanvas(int index)
+    void SetNextUICanvas(int index)
     {
-        nowUICanvas = UIList[index] ;
+        SetNextUICanvas(UIList[index]);
+    }
+    void SetNextUICanvas(UICanvas cv)
+    {
+        nextUICanvas = cv;
     }
 
-    public void SetUIActive(int index,bool active,int sortOrder=0)
+    void SetNowUICanvas(int index)
     {
-        UIList[index].gameObject.SetActive(active);
+        SetNowUICanvas(UIList[index]);
+    }
+    void SetNowUICanvas(UICanvas cv)
+    {
+        nowUICanvas = cv;
+    }
+
+    public void OpenUICanvas(int index,int sortOrder=0)
+    {
+        SetNextUICanvas(index);
         UIList[index].SetSortOrder(sortOrder);
     }
+
+    public void CloseUICanvas(int index)
+    {
+        UIList[index].SetStateEnd();
+    }
     
+    public void SleepUICanvas(int index)
+    {
+        UIList[index].SetStateSleep();
+    }
 }
