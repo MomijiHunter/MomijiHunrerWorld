@@ -81,18 +81,18 @@ namespace kubota
                     anim.SetBool("Walk", false);
                 }
 
-                if (Input.GetKeyDown(KeyCode.Space) && !attacking)
+                if (Input.GetButtonDown("Cancel") && !attacking)
                 {
                     if (isGrounded.isGrounded)
                     {
                         StartCoroutine(Jump());
                     }
                 }
-                if (Input.GetKey(KeyCode.Space) && jumping)
+                if (Input.GetButton("Cancel") && jumping)
                 {
                     Jump(jumpPower);
                 }
-                if (Input.GetKeyUp(KeyCode.Space))
+                if (Input.GetButtonUp("Cancel"))
                 {
                     jumping = false;
                 }
@@ -119,14 +119,14 @@ namespace kubota
                     anim.SetBool("Hide", false);
                 }
 
-                if (Input.GetKeyDown(KeyCode.Z))
+                if (Input.GetButtonDown("Submit"))
                 {
                     Attack();
                 }
 
 
                 currentHP = Mathf.Clamp(currentHP, 0, MaxHP);
-                if (Input.GetKeyDown(KeyCode.X))
+                if (Input.GetButtonDown("ButtonX"))
                 {
                     Eat();
                 }
