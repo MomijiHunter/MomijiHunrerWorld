@@ -181,7 +181,7 @@ namespace kubota
         {
             if (!invincible)
             {
-                if (damage >= 5)
+                if (damage >= 1)
                 {
                     StartCoroutine(BlowAway());
                 }
@@ -208,6 +208,11 @@ namespace kubota
             anim.SetTrigger("BlowAway");
             yield return new WaitForEndOfFrame();
             rb.velocity = new Vector2(-50, 50);
+            yield return new WaitForSeconds(0.5f);
+            yield return new WaitUntil(() => isGrounded.isGrounded);
+            anim.SetBool("Down", true);
+            yield return new WaitUntil(() => Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Vertical") > 0 || Input.GetButton("Submit"));
+            anim.SetBool("Down", false);
         }
 
         void Heal()
