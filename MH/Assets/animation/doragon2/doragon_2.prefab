@@ -1001,6 +1001,76 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -2.962262
       objectReference: {fileID: 0}
+    - target: {fileID: 4257535537452400245, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257535537452400245, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6027315424045345414, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: -6027315424045345414, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6878897337772006412, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: -6878897337772006412, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 995190693874249194, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: 995190693874249194, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -756549745262288302, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: -756549745262288302, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2553625917011891269, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: -2553625917011891269, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3721937508683329353, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1078832799
+      objectReference: {fileID: 0}
+    - target: {fileID: -3721937508683329353, guid: 3a1eefc75c83c0647bf38d20498472e8,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -1131583691364294377, guid: 3a1eefc75c83c0647bf38d20498472e8,
     type: 3}
