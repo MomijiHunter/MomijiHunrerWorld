@@ -63,6 +63,18 @@ public class UICanvas : MonoBehaviour
         if (selectList_use.Count == 0) return;
         selectList_use[index_before.x][index_before.y].SelectOff();
         selectList_use[index_now.x][index_now.y].SelectOn();
+
+        if (index_now != index_before)
+        {
+            ChengeIndexAction();
+        }
+    }
+    /// <summary>
+    /// indexの値が変更になった時の処理
+    /// </summary>
+    virtual protected void ChengeIndexAction()
+    {
+
     }
 
     bool CheckInputEnable()
@@ -239,6 +251,7 @@ public class UICanvas : MonoBehaviour
     public virtual void SetStateEnd()
     {
         SetState(State.END);
+
     }
 
     public virtual void SetStateAwake()
@@ -254,5 +267,11 @@ public class UICanvas : MonoBehaviour
         }
     }
     
+    protected void ResetIndex()
+    {
+        index_now = Vector2Int.zero;
+        index_before = Vector2Int.zero;
+    }
+
     #endregion
 }

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UICanvas_openOtherUI : UICanvas
+public class UICanvas_openTargetUI : UICanvas
 {
+    [SerializeField] int targetIndex;
+    protected int TargetIndex { get {return targetIndex; } }
     [SerializeField] bool isSleepCanvas;
-    [SerializeField] int beforeUIIndex=-1;
+    [SerializeField] int beforeUIIndex = -1;
 
     protected override void SubmitAction()
     {
-        var d = nowSelectComponent.GetComponent<UI_selectComp_button_uiData>();
-
-        uictrl.OpenUICanvas(d.TargetUIIndex, (isSleepCanvas) ? sortOrder+1 : sortOrder);
+        uictrl.OpenUICanvas(targetIndex, (isSleepCanvas) ? sortOrder+1 : sortOrder);
         if (isSleepCanvas)
         {
             uictrl.SleepUICanvas(myUIIndex);
@@ -28,7 +28,7 @@ public class UICanvas_openOtherUI : UICanvas
         {
             uictrl.OpenUICanvas(beforeUIIndex, sortOrder - 1);
             uictrl.CloseUICanvas(myUIIndex);
-
+            ResetIndex();
         }
     }
 }

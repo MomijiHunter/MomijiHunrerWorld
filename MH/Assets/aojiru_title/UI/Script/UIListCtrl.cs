@@ -86,4 +86,10 @@ public class UIListCtrl : MonoBehaviour
     {
         UIList[index].SetStateSleep();
     }
+
+    public UICanvas GetUICanvas(int index)
+    {
+
+        return UIList[index];
+    }
 }
