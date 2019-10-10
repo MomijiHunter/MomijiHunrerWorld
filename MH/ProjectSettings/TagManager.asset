@@ -14,6 +14,7 @@ TagManager:
   - PlayerCamera
   - DropItem
   - PlayerSound
+  - Player_Sound
   layers:
   - Default
   - TransparentFX
@@ -56,6 +57,12 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 1078832799
+    locked: 0
+  - name: Boss
+    uniqueID: 138385703
     locked: 0
   - name: Player
     uniqueID: 615885505
