@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class UI_selectComp_text : UI_selectComponentBase
 {
-    [SerializeField] Text text;
+    [SerializeField]  Text text;
+    protected Text myText { get { return text; } }
 
     [SerializeField] Color color_select;
     [SerializeField] Color color_cantSelect;
