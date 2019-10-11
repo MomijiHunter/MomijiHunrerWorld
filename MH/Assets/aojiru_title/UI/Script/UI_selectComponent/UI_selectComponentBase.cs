@@ -47,7 +47,7 @@ public class UI_selectComponentBase : MonoBehaviour
     {
         bool beforeSleep = sleep;
 
-        if (myCanbus.StateMode != UICanvas.State.NONE) sleep = true;
+        if (myCanbus.UIState != UICanvas.UISTATE.ACTIVE) sleep = true;
         else sleep = false;
 
         if (beforeSleep != sleep && !sleep) SleepEndAction();

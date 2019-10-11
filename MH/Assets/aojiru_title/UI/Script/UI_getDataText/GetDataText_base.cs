@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public abstract class GetDataText_base<T> : MonoBehaviour
 {
-    [SerializeField] UICanvas myUIcanvas;
+    [SerializeField] UICanvas_button myUIcanvas;
     protected UI_selectComponentBase targetButton { get; private set; }
     UI_selectComponentBase beforeTargetButton;
     protected T myData { get; private set; }
