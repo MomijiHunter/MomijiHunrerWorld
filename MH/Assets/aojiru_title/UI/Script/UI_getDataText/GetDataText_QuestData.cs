@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GetDataText_QuestData : GetDataText_base<QuestData>
+public class GetDataText_QuestData : GetDataText_base<UI_buttonData_quest>
 {
     [SerializeField] Text nameText;
     [SerializeField] Text explaText;
 
-    protected override QuestData GetMydata()
+    protected override UI_buttonData_quest GetMydata()
     {
-        var d = targetButton.GetComponent<UI_selectComp_button_QuestData>();
-        if (d == null) return null;
-        return d.GetQuestData();
+        var d = targetButton.GetData<UI_buttonData_quest>();
+        return d;
     }
 
     protected override void DisplayData()

@@ -55,4 +55,9 @@ public class UI_selectComp_text : UI_selectComponentBase
         text.color = color_default;
         if (selected) SelectOn();
     }
+
+    public override T GetData<T>()
+    {
+        return null;
+    }
 }
