@@ -5,11 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class UIAddtionalAction_questData : UIAddtionalAction_buttonBase
 {
-    [SerializeField] QuestData myData;
+    [SerializeField] UI_buttonData_quest myData;
     public void GetQuestData_fromButton()
     {
-       var data= myCanvas_Index.nowSelectComponent.GetComponent<UI_selectComp_button_QuestData>();
-       myData=data.GetQuestData();
+        myData = myCanvas_Index.nowSelectComponent.GetData<UI_buttonData_quest>();
     }
 
     public void GoQuest()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class QuestData
+public class UI_buttonData_quest : UI_buttonDataBase
 {
     [SerializeField,TextArea(1,3)] string questName;
     public string QuestName { get { return questName; } }
@@ -16,16 +16,17 @@ public class QuestData
 
 public class UI_selectComp_button_QuestData : UI_selectComp_text_image
 {
-    [SerializeField] QuestData questData;
+    [SerializeField] UI_buttonData_quest questData;
 
     protected override void Start()
     {
         base.Start();
         myText.text = questData.QuestName;
     }
+    
 
-    public QuestData GetQuestData()
+    public override T GetData<T>()
     {
-        return questData;
+        return questData as T;
     }
 }

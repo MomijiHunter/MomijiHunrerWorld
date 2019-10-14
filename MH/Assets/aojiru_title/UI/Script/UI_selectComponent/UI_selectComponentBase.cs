@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class UI_buttonDataBase
+{
+
+}
+
 /// <summary>
 /// ボタンとかのベース
 /// </summary>
-public class UI_selectComponentBase : MonoBehaviour
+public abstract class  UI_selectComponentBase : MonoBehaviour
 {
     [SerializeField] bool selectable;
     public bool Selectable { get { return selectable; }protected set { selectable = value; } }
@@ -62,4 +67,8 @@ public class UI_selectComponentBase : MonoBehaviour
     {
 
     }
+
+    #region Data
+    public abstract T GetData<T>() where T : UI_buttonDataBase;
+    #endregion
 }

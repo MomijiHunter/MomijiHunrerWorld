@@ -27,4 +27,9 @@ public class UI_selectComp_text_image : UI_selectComp_text
         base.SelectOff();
         image.color = color_default_image;
     }
+
+    public override T GetData<T>()
+    {
+        return base.GetData<T>();
+    }
 }
