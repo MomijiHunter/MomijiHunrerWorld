@@ -85,6 +85,11 @@ namespace aojilu
         float nextChengeLength;//次移動するまでの時間
         [SerializeField]protected LoadObject nextLordObj;//次に移動する場所
 
+        //乱数系
+        float? randomFixedNumber = null;//乱数を固定したときの値
+        protected bool IsFixedRandomNumber { get { return randomFixedNumber != null; } }
+
+
         #region 便利系
         [SerializeField] float upPlTime;
         protected float UpPlTime { get { return upPlTime; } }
@@ -291,6 +296,32 @@ namespace aojilu
         {
             AIactionIndex = i;
         }
+
+        #region 乱数関連
+        protected float GetAIRandaomNumver()
+        {
+            float result=0.0f;
+            if (randomFixedNumber == null)
+            {
+                result = Random.Range(0, 100);
+            }
+            else
+            {
+                result = (float)randomFixedNumber;
+            }
+            return result;
+        }
+
+        protected void SetRandFiexed(float f)
+        {
+            randomFixedNumber = f;
+        }
+
+        protected void ResetRandFiexed()
+        {
+            randomFixedNumber = null;
+        }
+        #endregion
         #endregion
         #region 死亡時など特定の状況で呼ばれる関数
         /// <summary>
