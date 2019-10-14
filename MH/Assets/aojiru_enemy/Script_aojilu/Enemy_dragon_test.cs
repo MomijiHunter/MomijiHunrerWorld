@@ -23,7 +23,7 @@ namespace aojilu
 
         [SerializeField] float aiStateOther_upFire;//特殊状況の時に呼ばれる可能性
 
-        float? randFixed = null;
+        //float? randFixed = null;
 
         int counter;
 
@@ -39,7 +39,8 @@ namespace aojilu
         {
             base.AIAction_undetect();
 
-            float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
+            //float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
+            float rand = GetAIRandaomNumver();
 
             if (detectState == DETECTSTATE.DETECT)
             {
@@ -83,7 +84,8 @@ namespace aojilu
         {
             base.AIAction();
 
-            float rand = (randFixed==null)?Random.Range(0, 100):(float)randFixed;
+            //float rand = (randFixed==null)?Random.Range(0, 100):(float)randFixed;
+            float rand = GetAIRandaomNumver();
             switch (aiState)
             {
                 case AISTATE.AISELECT:
@@ -135,7 +137,7 @@ namespace aojilu
                     }
                     break;
                 case AISTATE.ATTACK:
-                    if (stateInfo.IsTag("attack")&&randFixed==null) SetAIState(AISTATE.AISELECT,1.0f);
+                    if (stateInfo.IsTag("attack")&&!IsFixedRandomNumber) SetAIState(AISTATE.AISELECT,1.0f);
 
                     if (UpPlTime>5.0f&& rand<aiStateOther_upFire)
                     {
@@ -159,18 +161,19 @@ namespace aojilu
                         if (!IsPlayerFront()) Attack3();
                     }else if(rand< aiStateFrontPl_dash + aiStateFrontPl_head + aiStateFrontPl_tail + aiStateFrontPl_jump)
                     {
-                        if (GetDistancePlayer_X() > 10.0f&&randFixed==null) return;
+                        if (GetDistancePlayer_X() > 10.0f&&!IsFixedRandomNumber) return;
                         if (counter >= 3)
                         {
                             animator.SetTrigger("fall1");
                             SetAIState(AISTATE.WAIT, 3.0f);
-                            randFixed = null;
+                            ResetRandFiexed();
                             counter = 0;
                         }
                         else
                         {
                             animator.SetTrigger("jump");
-                            randFixed = rand;
+                            SetRandFiexed(rand);
+                            //randFixed = rand;
                             ExtendStateTime(3.0f);
                         }
                     }
