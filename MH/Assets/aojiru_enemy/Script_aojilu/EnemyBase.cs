@@ -14,6 +14,13 @@ namespace aojilu
         [SerializeField] bool nonActive;//処理の停止
         #endregion
 
+        public enum BATTLETYPE
+        {
+            DETECT_ATTACK,DAMAGED_ATTACK,
+            DETECT_ESCAPE,DAMAGED_ESCAPE
+        }
+        [SerializeField] protected BATTLETYPE battleType = BATTLETYPE.DETECT_ATTACK;
+
         public enum DETECTSTATE
         {
             DETECT,UNDETECT
@@ -49,6 +56,7 @@ namespace aojilu
         protected Transform plTr;
         AudioSource audioSource;
         protected AnimatorStateInfo stateInfo;
+        [SerializeField] Transform spriteBodyTr;
         [SerializeField] BoxCollider2D footCollider;
         [SerializeField] protected Transform effectPos;
         [SerializeField] GameObject[] effects;
@@ -61,11 +69,7 @@ namespace aojilu
         [SerializeField] protected TagCheckArea detectCheckArea;
 
         [SerializeField] MomijiAnim myMomiji;
-
-        //死んだ時の敵のアイテムドロップ関連
-        [SerializeField] protected GameObject deadItem;
-        [SerializeField] protected Transform dropPos;
-        int deadItemCount;
+        
         //========================
 
         [SerializeField] protected float moveSpeed;
@@ -187,6 +191,11 @@ namespace aojilu
         protected void ResetUpPlTime()
         {
             upPlTime = 0; ;
+        }
+
+        public bool GetIsDead()
+        {
+            return IsDead();
         }
         #endregion
         #region mapの移動関連
@@ -333,16 +342,7 @@ namespace aojilu
             //Destroy(gameObject);
             myMomiji.BreakMomiji();
         }
-
-        /// <summary>
-        /// 死亡時のアイテム生成
-        /// </summary>
-        protected virtual void MakeDeadItem()
-        {
-            if (deadItemCount != 0||deadItem==null) return;
-            Instantiate(deadItem, dropPos.position, Quaternion.identity);
-            deadItemCount++;
-        }
+        
 
         public void DamageAction(int damage)
         {
@@ -479,6 +479,16 @@ namespace aojilu
         protected float GetDistancePlayer_X()
         {
             return Mathf.Abs(plTr.position.x - tr.position.x);
+        }
+
+        /// <summary>
+        /// spriteのグローバル座標をそのままに、ローカル座標を元に戻す
+        /// </summary>
+        protected void ReplaceBodyPosition()
+        {
+            Vector2 temp = spriteBodyTr.position;
+            tr.position += spriteBodyTr.localPosition;
+            spriteBodyTr.position = temp;
         }
 
         #region Check系

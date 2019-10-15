@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 397582298}
   - component: {fileID: 397582297}
   - component: {fileID: 7499418476438583971}
+  - component: {fileID: 7139745665527235475}
   m_Layer: 0
   m_Name: doragon_2
   m_TagString: Enemy
@@ -524,6 +525,7 @@ MonoBehaviour:
   stateLog: 0
   nonActive: 0
   detectState: 1
+  spriteBodyTr: {fileID: 0}
   footCollider: {fileID: 496956693}
   effectPos: {fileID: 7157137040105620052}
   effects:
@@ -538,9 +540,6 @@ MonoBehaviour:
   eyeCheckArea_canHide: {fileID: 9087765736175917546}
   detectCheckArea: {fileID: 176517911}
   myMomiji: {fileID: 3109581259763231660}
-  deadItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
-    type: 3}
-  dropPos: {fileID: 7564868651669886469}
   moveSpeed: 10
   chengeAreaEnable: 0
   nowMapName: 
@@ -655,6 +654,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7139745665527235475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574834742324233543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dfe04d204511144881174c47d4f0e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCharcter: {fileID: 397582297}
+  dropPos: {fileID: 7564868651669886469}
+  dropItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
+    type: 3}
 --- !u!1 &5193707326230390253
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,15 +1089,15 @@ PrefabInstance:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -1131583691364294377, guid: 3a1eefc75c83c0647bf38d20498472e8,
     type: 3}
---- !u!4 &8642763059008138741 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3995729983750200391, guid: 3a1eefc75c83c0647bf38d20498472e8,
-    type: 3}
-  m_PrefabInstance: {fileID: 4574834743731637836}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4643370549127989940 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9155117775196620024, guid: 3a1eefc75c83c0647bf38d20498472e8,
+    type: 3}
+  m_PrefabInstance: {fileID: 4574834743731637836}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8642763059008138741 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3995729983750200391, guid: 3a1eefc75c83c0647bf38d20498472e8,
     type: 3}
   m_PrefabInstance: {fileID: 4574834743731637836}
   m_PrefabAsset: {fileID: 0}

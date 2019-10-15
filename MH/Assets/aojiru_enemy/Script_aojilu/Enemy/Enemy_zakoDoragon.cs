@@ -44,7 +44,6 @@ namespace aojilu
             base.DeadAction();
             if (stateInfo.IsTag("Dead")) return;
             StartCoroutine(WaitTimeAction(10.0f,() => Destroy(this.gameObject)));
-            MakeDeadItem();
         }
 
         protected override void AIAction_undetect()
