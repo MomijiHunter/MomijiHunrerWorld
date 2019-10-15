@@ -7,7 +7,6 @@ namespace aojilu
     {
         [SerializeField] float aiStateNum_walk;
         [SerializeField] float aiStateNum_run;
-        [SerializeField] float aiStateNum_dash;
         [SerializeField] float aiStateNum_attack;
 
 
@@ -49,8 +48,8 @@ namespace aojilu
                     }
 
                     if (rand < aiStateNum_walk) SetAIState(AISTATE.APPROACH_WALK, 6.0f);
-                    else if (rand < aiStateNum_walk + aiStateNum_dash) SetAIState(AISTATE.APPROACH_DASH, 6.0f);
-                    else if (rand < aiStateNum_walk + aiStateNum_dash + aiStateNum_attack) SetAIState(AISTATE.ATTACK, 4.0f);
+                    else if (rand < aiStateNum_walk + aiStateNum_run) SetAIState(AISTATE.APPROACH_DASH, 6.0f);
+                    else if (rand < aiStateNum_walk + aiStateNum_run + aiStateNum_attack) SetAIState(AISTATE.ATTACK, 4.0f);
                     else
                     {
                         SetAIState(AISTATE.WAIT, 4.0f);

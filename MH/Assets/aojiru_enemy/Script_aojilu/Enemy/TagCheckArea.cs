@@ -10,6 +10,7 @@ namespace aojilu
         public bool InternalTarget { get { return internalTarget; } }
 
         Vector2 size;
+        Vector2 offset;
         Transform tr;
 
         [SerializeField] string[] tags;
@@ -19,6 +20,7 @@ namespace aojilu
             internalTarget = false;
             BoxCollider2D col = GetComponent<BoxCollider2D>();
             size = col.size;
+            offset = col.offset;
             //col.enabled = false;
             tr = transform;
         }
@@ -26,7 +28,7 @@ namespace aojilu
         private void Update()
         {
 
-            Collider2D[] cols = Physics2D.OverlapBoxAll(tr.position, size, 0);
+            Collider2D[] cols = Physics2D.OverlapBoxAll(tr.position+(Vector3)offset, size, 0);
 
             bool localDetect = false;
             foreach (var obj in cols)
