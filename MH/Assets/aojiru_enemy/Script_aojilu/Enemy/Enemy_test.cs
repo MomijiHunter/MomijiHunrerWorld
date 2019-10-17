@@ -11,7 +11,7 @@ namespace aojilu
         [SerializeField] float aiStateNum_walk;
         [SerializeField] float aiStateNum_dash;
 
-        protected override void AIAction()
+        protected override void AIAction_detect()
         {
             float rand = Random.Range(0,100);
             switch (aiState)

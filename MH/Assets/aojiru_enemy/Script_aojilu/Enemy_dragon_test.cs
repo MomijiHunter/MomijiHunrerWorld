@@ -42,16 +42,16 @@ namespace aojilu
             //float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
             float rand = GetAIRandaomNumver();
 
-            if (detectState == DETECTSTATE.DETECT)
+            if (DetectState == DETECTSTATE.DETECT)
             {
                 SetAIState(AISTATE.WAIT, 3.0f);
-                SetAIIndex(1);
+                //SetAIIndex(1);
                 return;
             }
             switch (aiState)
             {
                 case AISTATE.AISELECT:
-                    if (chengeAreaEnable) SetAIState(AISTATE.MAPCHENGE,30.0f);
+                    if (ChengeAreaEnable) SetAIState(AISTATE.MAPCHENGE,30.0f);
                     else if (rand < aiStateNum_walk_ud) SetAIState(AISTATE.APPROACH_WALK, 5.0f);
                     else if (rand < aiStateNum_walk_ud + aiStateNum_wait_ud) SetAIState(AISTATE.WAIT, 3.0f);
                     else if (rand < aiStateNum_walk_ud + aiStateNum_wait_ud + aiStateNum_rest_ud) SetAIState(AISTATE.ATTACK, 5.0f);
@@ -80,16 +80,16 @@ namespace aojilu
             }
         }
 
-        protected override void AIAction()
+        protected override void AIAction_detect()
         {
-            base.AIAction();
+            base.AIAction_detect();
 
             //float rand = (randFixed==null)?Random.Range(0, 100):(float)randFixed;
             float rand = GetAIRandaomNumver();
             switch (aiState)
             {
                 case AISTATE.AISELECT:
-                    if (chengeAreaEnable)
+                    /*if (chengeAreaEnable)
                     {
                         detectState = DETECTSTATE.UNDETECT;
                         preDetectTime = Time.fixedTime;
@@ -99,7 +99,7 @@ namespace aojilu
                     {
                         SetAIIndex(0);
                         return;
-                    }
+                    }*/
 
                     if (rand < aiStateNum_walk) SetAIState(AISTATE.APPROACH_WALK, 6.0f);
                     else if (rand < aiStateNum_walk + aiStateNum_dash) SetAIState(AISTATE.APPROACH_DASH, 6.0f);
@@ -190,14 +190,7 @@ namespace aojilu
                     break;
             }
         }
-
-        protected override void DamageDetectAction()
-        {
-            base.DamageDetectAction();
-            SetDirectionToPl();
-            StopMove();
-
-        }
+        
 
         void Attack1()
         {

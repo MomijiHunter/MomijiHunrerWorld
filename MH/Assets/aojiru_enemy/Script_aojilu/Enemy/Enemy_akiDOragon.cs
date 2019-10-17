@@ -19,23 +19,23 @@ namespace aojilu
             base.AIAction_undetect();
             float rand = GetAIRandaomNumver();
 
-            if (detectState == DETECTSTATE.DETECT)
+            if (DetectState == DETECTSTATE.DETECT)
             {
                 SetAIState(AISTATE.WAIT, 3.0f);
-                SetAIIndex(1);
+                //SetAIIndex(1);
                 return;
             }
         }
 
-        protected override void AIAction()
+        protected override void AIAction_detect()
         {
-            base.AIAction();
+            base.AIAction_detect();
 
             float rand = GetAIRandaomNumver();
             switch (aiState)
             {
                 case AISTATE.AISELECT:
-                    if (chengeAreaEnable)
+                    /*if (chengeAreaEnable)
                     {
                         detectState = DETECTSTATE.UNDETECT;
                         preDetectTime = Time.fixedTime;
@@ -45,7 +45,7 @@ namespace aojilu
                     {
                         SetAIIndex(0);
                         return;
-                    }
+                    }*/
 
                     if (rand < aiStateNum_walk) SetAIState(AISTATE.APPROACH_WALK, 6.0f);
                     else if (rand < aiStateNum_walk + aiStateNum_run) SetAIState(AISTATE.APPROACH_DASH, 6.0f);

@@ -16,17 +16,22 @@ namespace aojilu
 
         public enum BATTLETYPE
         {
-            DETECT_ATTACK,DAMAGED_ATTACK,
-            DETECT_ESCAPE,DAMAGED_ESCAPE
+            DETECT_ATTACK,
+            DAMAGED_ATTACK,
+            //DETECT_ESCAPE,
+            //DAMAGED_ESCAPE
         }
         [SerializeField] protected BATTLETYPE battleType = BATTLETYPE.DETECT_ATTACK;
 
         public enum DETECTSTATE
         {
-            DETECT,UNDETECT
+            DETECT,UNDETECT,PREDETECT
         }
-        [SerializeField]protected DETECTSTATE detectState=DETECTSTATE.UNDETECT;
+        [SerializeField] DETECTSTATE detectState=DETECTSTATE.UNDETECT;
         public DETECTSTATE DetectState { get { return detectState; } }
+        protected float preDetectTime;//最後に遭遇したタイミング
+        [SerializeField] float preDetectLength;//警戒状態が解かれるまでの時間
+
 
 
         public enum AISTATE
@@ -41,6 +46,7 @@ namespace aojilu
         }
         protected AISTATE aiState;
         public AISTATE AiState { get { return aiState; } }
+        
         
         float aiStartTime;//今のステイとになった時刻
         float aiWaitLength;//今のステイとを続ける時間
@@ -76,13 +82,11 @@ namespace aojilu
         float? dashModeSpeed=null;//nullじゃないなら、強制移動。アニメーションは別途
         public bool isGroundead { get; private set; }
 
-        [SerializeField] protected bool chengeAreaEnable;//マップ移動フラグ
+        [SerializeField] bool chengeAreaEnable;//マップ移動フラグ
         public bool ChengeAreaEnable { get { return chengeAreaEnable; } }
 
         [SerializeField] string nowMapName;//現在のマップ名
 
-        protected float preDetectTime;//最後に遭遇したタイミング
-        [SerializeField]float preDetectLength;//警戒状態が解かれるまでの時間
         
         float mapChengeStartTime;//前回移動した時間
         [SerializeField] Vector2 nextChengeLengthArea;//次移動するまでの時間の最大値と最小値
@@ -113,9 +117,7 @@ namespace aojilu
             plTr = player.transform;
             animator = GetComponent<Animator>();
             footCollider.enabled = false;
-            AIActionList.Add(() => AIAction_undetect());
-            AIActionList.Add(() => AIAction());
-            AIactionIndex = 0;
+            AIInit();
             mapChengeStartTime = Time.fixedTime;
             preDetectTime = -preDetectLength;
             audioSource = GetComponent<AudioSource>();
@@ -137,11 +139,12 @@ namespace aojilu
                 DeadAction();
                 return;
             }
-            SetChengeMapState();//マップ遷移するかの確認
+            ChengeMapStateUpdate();//マップ遷移するかの確認
             isGroundead = CheckGranudead();
             animator.SetBool("isGrounded", isGroundead);
             CheckAction();//発見処理
-            AIActionList[AIactionIndex].Invoke();//AI処理
+            AIUpdate();
+
             UtilUpdate();
 
             if (dashModeSpeed != null)
@@ -202,17 +205,22 @@ namespace aojilu
         /// <summary>
         /// 既定の時間が過ぎていたら移動フラグを立てる
         /// </summary>
-        void SetChengeMapState()
+        void ChengeMapStateUpdate()
         {
             if (nextChengeLength < 0) return;
             if (Time.fixedTime > mapChengeStartTime + nextChengeLength)
             {
-                chengeAreaEnable = true;
+                SetChengeAreaEnable(true);
             }
             else
             {
-                chengeAreaEnable = false;
+                SetChengeAreaEnable(false);
             }
+        }
+
+        void SetChengeAreaEnable(bool flag)
+        {
+            chengeAreaEnable = flag;
         }
 
         /// <summary>
@@ -224,7 +232,6 @@ namespace aojilu
             nextLordObj = obj;
             mapChengeStartTime = Time.fixedTime;
             SetAIState(AISTATE.AISELECT, 1.0f);
-            chengeAreaEnable = false;
 
             nextChengeLength = GetNextMapChengeTime();
             SetNowMapName(obj.MyMapName);
@@ -251,6 +258,68 @@ namespace aojilu
         #endregion
 
         #region AI
+        /// <summary>
+        /// AI関連の初期化関数
+        /// </summary>
+        void AIInit()
+        {
+            AIActionList.Add(() => AIAction_undetect());
+            AIActionList.Add(() => AIAction_detect());
+            AIactionIndex = 0;
+        }
+
+        /// <summary>
+        /// AI関連のアップデート処理
+        /// </summary>
+        void AIUpdate()
+        {
+            if (aiState == AISTATE.AISELECT)
+            {
+                switch (DetectState)
+                {
+                    case DETECTSTATE.DETECT:
+                        SetAIIndex(1);
+                        break;
+                    case DETECTSTATE.UNDETECT:
+                    case DETECTSTATE.PREDETECT:
+                        SetAIIndex(0);
+                        break;
+                }
+
+                if (chengeAreaEnable)
+                {
+                    MoveToTarget_X(1.0f, (Vector2)nextLordObj.transform.position, moveSpeed);
+                    return;
+                }
+
+
+            }
+
+            AIActionList[AIactionIndex].Invoke();//AI処理
+        }
+        /// <summary>
+        /// aiの内部処理。子で実装
+        /// </summary>
+        protected virtual void AIAction_detect()
+        {
+            if (Time.fixedTime > aiStartTime + aiWaitLength)
+            {
+                aiStartTime = 0;
+                SetAIState(AISTATE.AISELECT, 1.0f);
+            }
+        }
+        /// <summary>
+        /// 未発見時のai
+        /// </summary>
+        protected virtual void AIAction_undetect()
+        {
+            if (Time.fixedTime > aiStartTime + aiWaitLength)
+            {
+                aiStartTime = 0;
+                SetAIState(AISTATE.AISELECT, 1.0f);
+            }
+        }
+        
 
         /// <summary>
         /// aiStateの変更
@@ -278,30 +347,8 @@ namespace aojilu
             aiWaitLength = t;
         }
 
-        /// <summary>
-        /// aiの内部処理。子で実装
-        /// </summary>
-        protected virtual void AIAction()
-        {
-            if (Time.fixedTime > aiStartTime + aiWaitLength)
-            {
-                aiStartTime = 0;
-                SetAIState(AISTATE.AISELECT, 1.0f);
-            }
-        }
 
-        /// <summary>
-        /// 未発見時のai
-        /// </summary>
-        protected virtual void AIAction_undetect()
-        {
-            if (Time.fixedTime > aiStartTime + aiWaitLength)
-            {
-                aiStartTime = 0;
-                SetAIState(AISTATE.AISELECT, 1.0f);
-            }
-        }
-        protected void SetAIIndex(int i)
+        void SetAIIndex(int i)
         {
             AIactionIndex = i;
         }
@@ -348,62 +395,87 @@ namespace aojilu
         {
             Damage(damage);
             animator.SetTrigger("damage");
-            if (detectState == DETECTSTATE.UNDETECT)
+            DamageDetectAction();
+        }
+
+        #endregion
+        #region detectStateのコントロール
+
+        /// <summary>
+        /// ダメージを受けた場合のDetect処理
+        /// </summary>
+        void DamageDetectAction()
+        {
+            if (detectState == DETECTSTATE.UNDETECT || detectState == DETECTSTATE.PREDETECT)
             {
-                DamageDetectAction();
+                detectState = DETECTSTATE.DETECT;
+                SetDirectionToPl();
                 animator.SetTrigger("detect");
+                StopMove();
             }
         }
 
-        /// <summary>
-        /// 敵を未発見でダメージを受けた場合
-        /// </summary>
-        protected virtual void DamageDetectAction()
-        {
-            detectState = DETECTSTATE.DETECT;
-        }
-        #endregion
         /// <summary>
         /// detectの変更
         /// </summary>
         protected virtual void CheckAction()
         {
-            if (Time.fixedTime < preDetectTime + preDetectLength)//発見状態から経過時間が短い場合すぐに気が付く
+            if (chengeAreaEnable)
             {
-                if (detectState == DETECTSTATE.UNDETECT)
-                {
-                    if (chengeAreaEnable) return;
-                    if (detectCheckArea.InternalTarget&&!player.hiding)
-                    {
-                        detectState = DETECTSTATE.DETECT;
-                        animator.SetTrigger("detect");
-                    }
-                }
+                detectState = DETECTSTATE.PREDETECT;
+                return;
             }
-            else
+            switch (battleType)
             {
+                case BATTLETYPE.DAMAGED_ATTACK://攻撃されたら戦闘モード
+                    switch (detectState)
+                    {
+                        case DETECTSTATE.DETECT:
+                            if (!detectCheckArea.InternalTarget) detectState = DETECTSTATE.UNDETECT;
+                            break;
+                    }
+                    break;
+                case BATTLETYPE.DETECT_ATTACK://発見したら戦闘モード
+                    switch (detectState)
+                    {
+                        #region DETECT_ATTACT
+                        case DETECTSTATE.UNDETECT:
+                            if (eyeCheckArea.InternalTarget
+                                || (eyeCheckArea_canHide.InternalTarget && !player.hiding))
+                            {
+                                detectState = DETECTSTATE.DETECT;
+                                animator.SetTrigger("detect");
+                            }
+                            break;
+                        case DETECTSTATE.PREDETECT:
+                            if (Time.fixedTime > preDetectLength + preDetectTime)
+                            {
+                                detectState = DETECTSTATE.UNDETECT;
+                            }
+                            else
+                            {
+                                if (detectCheckArea.InternalTarget && !player.hiding
+                                    || eyeCheckArea.InternalTarget)
+                                {
+                                    detectState = DETECTSTATE.DETECT;
+                                    animator.SetTrigger("detect");
+                                }
+                            }
+                            break;
+                        case DETECTSTATE.DETECT:
+                            if (!detectCheckArea.InternalTarget)
+                            {
+                                preDetectTime = Time.fixedTime;
+                                detectState = DETECTSTATE.PREDETECT;
+                            }
+                            break;
+                            #endregion
+                    }
+                    break;
+            }
 
-                if (detectState == DETECTSTATE.UNDETECT)
-                {
-                    if (chengeAreaEnable) return;
-                    if (eyeCheckArea.InternalTarget
-                        ||(eyeCheckArea_canHide.InternalTarget&&!player.hiding))
-                    {
-                        detectState = DETECTSTATE.DETECT;
-                        animator.SetTrigger("detect");
-                    }
-                }
-                else if (detectState == DETECTSTATE.DETECT)
-                {
-                    if (!detectCheckArea.InternalTarget)
-                    {
-                        preDetectTime = Time.fixedTime;
-                        detectState = DETECTSTATE.UNDETECT;
-                    }
-                }
-            }
         }
-
+        #endregion
         #region 動作関連
         protected override void Move(float speed)
         {

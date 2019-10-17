@@ -24,20 +24,6 @@ namespace aojilu
 
         float? randFixed = null;
         Vector2? nowTargetPos = null;
-        protected override void CheckAction()
-        {
-            if (attackMode)
-            {
-                base.CheckAction();
-            }
-            else
-            {
-                if (detectState == DETECTSTATE.DETECT)
-                {
-                    if (!detectCheckArea.InternalTarget) detectState = DETECTSTATE.UNDETECT;
-                }
-            }
-        }
 
         protected override void DeadAction()
         {
@@ -52,10 +38,10 @@ namespace aojilu
 
             float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
 
-            if (detectState == DETECTSTATE.DETECT)
+            if (DetectState == DETECTSTATE.DETECT)
             {
                 SetAIState(AISTATE.WAIT, 3.0f);
-                SetAIIndex(1);
+                //SetAIIndex(1);
                 return;
             }
             switch (aiState)
@@ -86,15 +72,15 @@ namespace aojilu
             }
         }
 
-        protected override void AIAction()
+        protected override void AIAction_detect()
         {
-            base.AIAction(); float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
+            base.AIAction_detect(); float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
             switch (aiState)
             {
                 case AISTATE.AISELECT:
-                    if (detectState == DETECTSTATE.UNDETECT)
+                    if (DetectState == DETECTSTATE.UNDETECT)
                     {
-                        SetAIIndex(0);
+                        //SetAIIndex(0);
                         return;
                     }
 
