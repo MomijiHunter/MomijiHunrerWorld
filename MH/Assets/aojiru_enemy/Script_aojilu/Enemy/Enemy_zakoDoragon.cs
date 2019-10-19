@@ -74,7 +74,8 @@ namespace aojilu
 
         protected override void AIAction_detect()
         {
-            base.AIAction_detect(); float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
+            base.AIAction_detect();
+            float rand = (randFixed == null) ? Random.Range(0, 100) : (float)randFixed;
             switch (aiState)
             {
                 case AISTATE.AISELECT:

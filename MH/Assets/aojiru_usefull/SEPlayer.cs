@@ -11,7 +11,7 @@ namespace aojilu
 
         private void Awake()
         {
-            GetComponent<AudioSource>();
+            audioSource=GetComponent<AudioSource>();
         }
 
         public void PlaySE_oneShot(int n)

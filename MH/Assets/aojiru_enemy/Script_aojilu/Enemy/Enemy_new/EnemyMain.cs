@@ -19,7 +19,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage
         WAIT,
         ATTACK
     }
-    protected AISTATE aiState;
+    [SerializeField]protected AISTATE aiState;
     public AISTATE AiState { get { return aiState; } }
 
     float aiStartTime;//今のステイとになった時刻
@@ -27,7 +27,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage
 
     protected Animator animator { get { return enemyCtrl.animator; } }
     #region 乱数系
-    protected float? randomFixedNumber { get; private set; }//乱数を固定したときの値
+    [SerializeField] float? randomFixedNumber = null;//乱数を固定したときの値
+    protected float? RandomFixedNumber { get { return randomFixedNumber; } }//乱数を固定したときの値
     protected bool IsFixedRandomNumber { get { return randomFixedNumber != null; } }
     #endregion
 
@@ -159,7 +160,15 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage
                 AIUpdate_undetect();
                 break;
             case EnemyController.DETECTSTATE.DETECT:
-                AIUpdate_detect();
+                if (aiState == AISTATE.ATTACK)
+                {
+                    if (attackNow) return;
+                    AIUpdate_attack();
+                }
+                else
+                {
+                    AIUpdate_detect();
+                }
                 break;
         }
     }
@@ -178,6 +187,11 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage
     }
 
     protected virtual void AIUpdate_detect()
+    {
+
+    }
+
+    protected virtual void AIUpdate_attack()
     {
 
     }

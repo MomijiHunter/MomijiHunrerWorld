@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 using kubota;
 using aojilu;
 
+[RequireComponent(typeof(EffectMaker))]
+[RequireComponent(typeof(SEPlayer))]
 public class EnemyController : CharBase
 {
     #region Debug
@@ -190,6 +192,8 @@ public class EnemyController : CharBase
         return MoveToTarget_X(distance_target,plTr.position,speed);
     }
 
+
+
     public bool MoveToTarget_X(float distanceTarget, Vector2 targetPos, float speed)
     {
         float distance = Mathf.Abs(targetPos.x - tr.position.x);
@@ -207,6 +211,28 @@ public class EnemyController : CharBase
             return false;
         }
     }
+
+    public bool EscapeToPlayer_X(float distance_target, float speed)
+    {
+        return EscapeToTarget_X(distance_target, plTr.position, speed);
+    }
+    public bool EscapeToTarget_X(float distanceTarget, Vector2 targetPos, float speed)
+    {
+        float distance = Mathf.Abs(targetPos.x - tr.position.x);
+        if (distance > distanceTarget)
+        {
+            Move(0);
+            return true;
+        }
+        else
+        {
+            SetDirectionToTarget(targetPos,true);
+            float dir = Mathf.Sign(-tr.localScale.x);
+            Move(speed * dir);
+
+            return false;
+        }
+    }
     /// <summary>
     /// プレイヤーのほうを向く
     /// </summary>
@@ -214,11 +240,25 @@ public class EnemyController : CharBase
     {
         SetDirectionToTarget(plTr.position);
     }
-    public void SetDirectionToTarget(Vector2 pos)
+    /// <summary>
+    /// 対象の方を向く
+    /// </summary>
+    /// <param name="reverse">trueなら対象と反対を向く</param>
+    public void SetDirectionToTarget(Vector2 pos,bool reverse=false)
     {
-        if (!IsTargetFront(pos))
+        if (reverse)//逆を向く
         {
-            tr.localScale = new Vector2(tr.localScale.x * -1, tr.localScale.y);
+            if (IsTargetFront(pos))
+            {
+                tr.localScale = new Vector2(tr.localScale.x * -1, tr.localScale.y);
+            }
+        }
+        else//対象を向く
+        {
+            if (!IsTargetFront(pos))
+            {
+                tr.localScale = new Vector2(tr.localScale.x * -1, tr.localScale.y);
+            }
         }
     }
     /// <summary>
