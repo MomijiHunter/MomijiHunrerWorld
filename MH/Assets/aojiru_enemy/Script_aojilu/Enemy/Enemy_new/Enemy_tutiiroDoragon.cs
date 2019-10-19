@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_testNew : EnemyMain
+public class Enemy_tutiiroDoragon : EnemyMain
 {
     Vector2 nowTarget;
 

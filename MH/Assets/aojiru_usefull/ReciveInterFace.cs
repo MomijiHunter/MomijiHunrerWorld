@@ -12,4 +12,11 @@ namespace aojilu
         /// </summary>
         void OnReciveDamage();
     }
+    public interface ReciveInterFace_mapChenge : IEventSystemHandler
+    {
+        /// <summary>
+        /// ダメージを食らった時に呼ばれる
+        /// </summary>
+        void OnReciveMapChenge(MapParent mapParent);
+    }
 }

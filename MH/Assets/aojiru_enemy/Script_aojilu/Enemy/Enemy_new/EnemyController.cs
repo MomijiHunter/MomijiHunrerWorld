@@ -51,7 +51,8 @@ public class EnemyController : CharBase
 
     [SerializeField] protected float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
-
+    public bool isGroundead { get; private set; }
+    [SerializeField] BoxCollider2D footCollider;
 
     [SerializeField] MomijiAnim myMomiji;
     #region　外部用フラグ
@@ -83,6 +84,8 @@ public class EnemyController : CharBase
             DeadAction();
             return;
         }
+        isGroundead = CheckGranudead();
+        AnimatorUpdate();
     }
     #region detect
     /// <summary>
@@ -272,7 +275,7 @@ public class EnemyController : CharBase
     }
     #endregion
     #region Get系
-    protected float GetDistancePlayer_X()
+    public float GetDistancePlayer_X()
     {
         return Mathf.Abs(plTr.position.x - tr.position.x);
     }
@@ -334,6 +337,24 @@ public class EnemyController : CharBase
         SendMessage_OnReciveDamage();
     }
     #endregion
+    #endregion
+    #region 接地系
+
+    bool CheckGranudead()
+    {
+        Collider2D[] cols = Physics2D.OverlapBoxAll(footCollider.transform.position, footCollider.size, 0);
+        foreach (var obj in cols)
+        {
+            if (obj.tag == "Ground") return true;
+        }
+        return false;
+    }
+    #endregion
+    #region Animation
+    void AnimatorUpdate()
+    {
+        animator.SetBool("isGrounded", isGroundead);
+    }
     #endregion
     /// <summary>
     /// 指定時間後に関数を実行
