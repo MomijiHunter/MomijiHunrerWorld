@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using kubota;
 using aojilu;
 
 public class EnemyController : CharBase
 {
-
     #region Debug
 
     [SerializeField] bool stateLog;//AIstateのログを出す
@@ -36,7 +36,7 @@ public class EnemyController : CharBase
     Player player;
     Transform tr;
     Transform plTr;
-    Animator animator;
+    public Animator animator { get; private set; }
     AnimatorStateInfo stateInfo;
     AudioSource audioSource;
     #endregion
@@ -48,8 +48,14 @@ public class EnemyController : CharBase
     #endregion
 
     [SerializeField] protected float moveSpeed;
+    public float MoveSpeed { get { return moveSpeed; } }
+
+
+    [SerializeField] MomijiAnim myMomiji;
     #region　外部用フラグ
     public bool IsChengedDetectState { get; private set; }
+    [SerializeField] bool attackNow = false;
+    public bool AttackNow { get {return attackNow; } }
     #endregion
 
     protected override void Awake()
@@ -69,6 +75,12 @@ public class EnemyController : CharBase
     protected override void CharacterUpdate()
     {
         if (nonActive || plTr == null) return;
+        stateInfo = animator.GetCurrentAnimatorStateInfo(0);//アニメーション情報の取得
+        if (IsDead())
+        {
+            DeadAction();
+            return;
+        }
     }
     #region detect
     /// <summary>
@@ -92,6 +104,7 @@ public class EnemyController : CharBase
     {
         SetDirectionToPl();
         animator.SetTrigger("detect");
+        StopMove();
     }
 
     /// <summary>
@@ -161,6 +174,11 @@ public class EnemyController : CharBase
     {
         rb.velocity = new Vector2(speed, rb.velocity.y);
         animator.SetFloat("move", Mathf.Abs(speed / moveSpeed));
+    }
+
+    public void Move_force(float speed)
+    {
+        Move(speed);
     }
     public void StopMove()
     {
@@ -246,12 +264,41 @@ public class EnemyController : CharBase
     }
     #endregion
     #endregion
+    #region 特定状況の関数
+    #region dead
+    /// <summary>
+    /// 死んだときのアクション
+    /// </summary>
+    protected virtual void DeadAction()
+    {
+        if (!stateInfo.IsTag("Dead"))
+        {
+            animator.SetTrigger("dead");
+            myMomiji.BreakMomiji();
+            StopMove();
+        }
+    }
 
+    public bool IsDeadSelf()
+    {
+        return IsDead();
+    }
+    #endregion
+    #region Damage
 
+    public void DamageAction(int damage)
+    {
+        Damage(damage);
+        animator.SetTrigger("damage");
+        //DamageDetectAction();
+        SendMessage_OnReciveDamage();
+    }
+    #endregion
+    #endregion
     /// <summary>
     /// 指定時間後に関数を実行
     /// </summary>
-    IEnumerator WaitTimeAction(float f, UnityAction ua)
+    public IEnumerator WaitTimeAction(float f, UnityAction ua)
     {
         yield return new WaitForSeconds(f);
         ua.Invoke();
@@ -259,7 +306,7 @@ public class EnemyController : CharBase
     /// <summary>
     /// 指定時間後に関数を実行
     /// </summary>
-    IEnumerator WaitFrameAction(int n, UnityAction ua)
+    public IEnumerator WaitFrameAction(int n, UnityAction ua)
     {
         for(int i = 0; i < n; i++)
         {
@@ -267,4 +314,15 @@ public class EnemyController : CharBase
         }
         ua.Invoke();
     }
+    #region sendMessage
+    void SendMessage_OnReciveDamage()
+    {
+        ExecuteEvents.Execute<ReciveInterFace_damage>(
+            target: gameObject,
+            eventData: null,
+            functor: (reciever, eventData) => reciever.OnReciveDamage()
+            );
+    }
+    
+    #endregion
 }
