@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using kubota;
 
-namespace aojilu {
-    public class EnemyBodyCollider : MonoBehaviour
+namespace aojilu
+{
+    public class EnemyBodyCollider_new : MonoBehaviour
     {
-        [SerializeField] EnemyBase enemyBase;
-        
+        [SerializeField] EnemyController enemyCtrl;
+
         private void OnTriggerEnter2D(Collider2D col)
         {
-
-            if (col.tag == "PlayerAttack")
+            if(col.tag== "PlayerAttack")
             {
-                var data= col.GetComponent<PlayerAttack>();
+                var data = col.GetComponent<PlayerAttack>();
                 if (data == null)
                 {
-                    enemyBase.DamageAction(1);
+                    enemyCtrl.DamageAction(1);
                 }
                 else
                 {
-                    enemyBase.DamageAction(data.attackPower);
+                    enemyCtrl.DamageAction(data.attackPower);
                 }
             }
         }

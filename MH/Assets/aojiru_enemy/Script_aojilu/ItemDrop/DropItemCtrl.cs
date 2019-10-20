@@ -6,13 +6,19 @@ namespace aojilu
 {
     public class DropItemCtrl : MonoBehaviour
     {
-        [SerializeField] EnemyBase myCharcter;
+        [SerializeField] EnemyController myCharcter;
         [SerializeField] Transform dropPos;
         [SerializeField] GameObject dropItem;
+
+        private void Awake()
+        {
+            myCharcter = GetComponent<EnemyController>();
+        }
 
         bool droped=false;
         private void Update()
         {
+            if (dropItem == null) return;
             if (IsDead_target()&&!droped)
             {
                 Drop();
@@ -27,7 +33,7 @@ namespace aojilu
 
         bool IsDead_target()
         {
-            return myCharcter.GetIsDead();
+            return myCharcter.IsDeadSelf();
         }
     }
 }
