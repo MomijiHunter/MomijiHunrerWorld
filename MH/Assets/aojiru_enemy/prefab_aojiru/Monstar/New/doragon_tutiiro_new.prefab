@@ -2182,7 +2182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8828224110624761445
 Transform:
   m_ObjectHideFlags: 0
@@ -2387,6 +2387,7 @@ MonoBehaviour:
   moveSpeed: 10
   footCollider: {fileID: 5042119498792375861}
   myMomiji: {fileID: 7988901225329313932}
+  spriteBodyTr: {fileID: 0}
 --- !u!114 &8828224110624761449
 MonoBehaviour:
   m_ObjectHideFlags: 0

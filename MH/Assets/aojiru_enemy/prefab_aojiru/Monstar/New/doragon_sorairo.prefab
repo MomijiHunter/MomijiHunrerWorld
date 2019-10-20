@@ -1056,16 +1056,17 @@ GameObject:
   - component: {fileID: 2675427809704705498}
   - component: {fileID: 4837123430888135032}
   - component: {fileID: 4837123430888135038}
-  - component: {fileID: 4837123430888135027}
   - component: {fileID: 4837123430888135026}
   - component: {fileID: 4837123430888135025}
+  - component: {fileID: 126467298}
+  - component: {fileID: 126467299}
   m_Layer: 0
   m_Name: doragon_sorairo
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4837123430888135036
 Transform:
   m_ObjectHideFlags: 0
@@ -1257,33 +1258,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9a88f96648bcd72488571cddd5a26ad1, type: 3}
   - {fileID: 8300000, guid: fe5ac8b3a2accfe4489a9e209076a330, type: 3}
   - {fileID: 8300000, guid: 1f04717986ea85d4f9d578ffa37e2733, type: 3}
---- !u!114 &4837123430888135027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4837123430888135024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7a90b2e45adb248a2dcb8d52b13e64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 4837123430888135037}
-  MaxHP: 30
-  currentHP: 30
-  stateLog: 0
-  nonActive: 0
-  battleType: 0
-  detectState: 1
-  preDetectLength: 30
-  eyeCheckArea: {fileID: 4837123429800991221}
-  eyeCheckArea_canHide: {fileID: 1651059594669547448}
-  detectCheckArea: {fileID: 4837123430195163148}
-  moveSpeed: 15
-  footCollider: {fileID: 4837123430791713575}
-  myMomiji: {fileID: 432581240272056551}
-  attackNow: 0
 --- !u!114 &4837123430888135026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1312,10 +1286,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiState: 0
+  isAntiArealMode: 0
+  aiStateNum_walk_ud: 60
+  aiStateNum_wait_ud: 20
+  aiStateNum_rest_ud: 10
+  aiStateNum_walk: 20
+  aiStateNum_dash: 50
+  aiStateNum_attack: 20
+  aiStateFrontPl_dash: 20
+  aiStateFrontPl_head: 20
+  aiStateFrontPl_tail: 20
+  aiStateFrontPl_jump: 20
+  aiStateFrontPl_fire: 20
   fireVector: {x: 10, y: -3}
   fireLength: 5
   fire: {fileID: -9128362477977420605, guid: 0cdab5fa1aed5604f9e6f4c107b16326, type: 3}
+  fireBunretu: {fileID: 125151666687077087, guid: 62b6cf805d17a934d8781a11a80491f4,
+    type: 3}
   effectPos: {fileID: 1948035991491239853}
+--- !u!114 &126467298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837123430888135024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9120c78a35366148ad4d68cc3d8937d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 4837123430888135037}
+  MaxHP: 300
+  currentHP: 300
+  stateLog: 0
+  nonActive: 0
+  battleType: 0
+  detectState: 1
+  preDetectLength: 60
+  eyeCheckArea: {fileID: 4837123429800991221}
+  eyeCheckArea_canHide: {fileID: 1651059594669547448}
+  detectCheckArea: {fileID: 4837123430195163148}
+  moveSpeed: 15
+  footCollider: {fileID: 4837123430791713575}
+  myMomiji: {fileID: 432581240272056551}
+  spriteBodyTr: {fileID: 0}
+  antiAirHeight: 4
+  antiAirLength: 3
+  arealTime: 0
+--- !u!114 &126467299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837123430888135024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dfe04d204511144881174c47d4f0e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCharcter: {fileID: 126467298}
+  dropPos: {fileID: 3406262064618478272}
+  dropItem: {fileID: 0}
 --- !u!1 &4837123431225832326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1670,7 +1703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c67ca7ca5da5934a9b548e8d6863b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyCtrl: {fileID: 4837123430888135027}
+  enemyCtrl: {fileID: 126467298}
 --- !u!1 &5768958055422911320
 GameObject:
   m_ObjectHideFlags: 0
