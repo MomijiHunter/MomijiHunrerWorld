@@ -26,6 +26,9 @@ namespace kubota
 
         public bool dead = false;
 
+        public bool charging = true;
+        public float chargeLv = 0;
+
         public int remainItems = 3;
 
         List<UnityAction> actions = new List<UnityAction>();
@@ -123,6 +126,10 @@ namespace kubota
                 {
                     Attack();
                 }
+                if (charging)
+                {
+                    chargeLv += Time.deltaTime;
+                }
 
 
                 currentHP = Mathf.Clamp(currentHP, 0, MaxHP);
@@ -165,6 +172,24 @@ namespace kubota
         {
             anim.SetTrigger("Attack_Air");
             canChainCombo = false;
+        }
+
+        private void Charge()
+        {
+            if (Input.GetButton("Submit"))
+            {
+                StartCoroutine(ChargeAttack());
+            }
+        }
+
+        private IEnumerator ChargeAttack()
+        {
+            charging = true;
+            anim.SetBool("Charge", true);
+            yield return new WaitUntil(() => Input.GetButtonUp("Submit"));
+            anim.SetTrigger("Attack");
+            charging = false;
+            chargeLv = 0;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
