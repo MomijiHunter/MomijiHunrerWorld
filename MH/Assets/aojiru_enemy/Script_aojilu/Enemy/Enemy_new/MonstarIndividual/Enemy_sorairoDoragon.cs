@@ -53,7 +53,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
                     rand = GetAIRandaomNumver();
                     nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                 }
-                if (EnemyCtrl.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
+                if (EnemyCtrl_antiFly.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
                 {
                     SetAIState(AISTATE.WAIT, 2.0f);
                     nowTargetPos = null;
@@ -83,13 +83,13 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
                 }
                 break;
             case AISTATE.APPROACH_WALK:
-                if (EnemyCtrl.MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
+                if (EnemyCtrl_antiFly.MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
                 {
                     SetAIState(AISTATE.ATTACK, 20.0f);
                 }
                 break;
             case AISTATE.APPROACH_DASH:
-                if (EnemyCtrl.MoveToPlayer_X(10.0f, moveSpeed))
+                if (EnemyCtrl_antiFly.MoveToPlayer_X(10.0f, moveSpeed))
                 {
                     SetAIState(AISTATE.ATTACK, 4.0f);
                 }
@@ -107,13 +107,13 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
         float rand = GetAIRandaomNumver();
         if (rand < AddAIProbNum(aiStateFrontPl_dash))
         {
-            EnemyCtrl.SetDirectionToPl();
+            EnemyCtrl_antiFly.SetDirectionToPl();
             animator.SetTrigger("attack2");
             StartAttack();
         }
         else if (rand < AddAIProbNum(aiStateFrontPl_head))
         {
-            if (EnemyCtrl.IsPlayerFront())
+            if (EnemyCtrl_antiFly.IsPlayerFront())
             {
                 animator.SetTrigger("attack1");
                 StartAttack();
@@ -121,14 +121,14 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
         }
         else if (rand <AddAIProbNum(aiStateFrontPl_tail))
         {
-            if (!EnemyCtrl.IsPlayerFront())
+            if (!EnemyCtrl_antiFly.IsPlayerFront())
             {
                 animator.SetTrigger("attack3");
                 StartAttack();
             }
         }else if (rand < AddAIProbNum(aiStateFrontPl_jump))
         {
-            if (EnemyCtrl.GetDistancePlayer_X() > 10.0f && !IsFixedRandomNumber) return;
+            if (EnemyCtrl_antiFly.GetDistancePlayer_X() > 10.0f && !IsFixedRandomNumber) return;
             if (jumpCounter == beforeCounter) return;
             if (jumpCounter >= 3)
             {
@@ -147,9 +147,9 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
         }
         else if(rand<AddAIProbNum(aiStateFrontPl_fire))
         {
-            if (EnemyCtrl.GetDistancePlayer_X() > 5.0f)
+            if (EnemyCtrl_antiFly.GetDistancePlayer_X() > 5.0f)
             {
-                EnemyCtrl.SetDirectionToPl();
+                EnemyCtrl_antiFly.SetDirectionToPl();
                 animator.SetTrigger("attack4");
                 StartAttack();
             }
@@ -165,7 +165,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
                 SetAIState(AISTATE.APPROACH_DASH, 3.0f);
                 break;
             case AISTATE.APPROACH_DASH:
-                if (EnemyCtrl.MoveToPlayer_X(1.0f, moveSpeed))
+                if (EnemyCtrl_antiFly.MoveToPlayer_X(1.0f, moveSpeed))
                 {
                     SetAIState(AISTATE.ATTACK, 4.0f);
                 }
@@ -184,7 +184,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
     protected override void AIUpdate_mapChenge()
     {
         base.AIUpdate_mapChenge();
-        EnemyCtrl.MoveToTarget_X(0.0f, mapChengeCtrl.GetNextLoadPosition(),EnemyCtrl.MoveSpeed);
+        EnemyCtrl_antiFly.MoveToTarget_X(0.0f, mapChengeCtrl.GetNextLoadPosition(),EnemyCtrl_antiFly.MoveSpeed);
     }
 
 

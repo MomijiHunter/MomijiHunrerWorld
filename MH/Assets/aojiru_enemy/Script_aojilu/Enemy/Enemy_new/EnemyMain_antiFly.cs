@@ -5,13 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyController_antiFly))]
 public class EnemyMain_antiFly : EnemyMain
 {
-    protected new EnemyController_antiFly EnemyCtrl { get; private set; }
+    protected EnemyController_antiFly EnemyCtrl_antiFly { get; private set; }
 
     [SerializeField] bool isAntiArealMode;
     protected override void Awake()
     {
         base.Awake();
-        EnemyCtrl = GetComponent<EnemyController_antiFly>();
+        EnemyCtrl_antiFly = GetComponent<EnemyController_antiFly>();
     }
 
 
@@ -28,7 +28,7 @@ public class EnemyMain_antiFly : EnemyMain
 
         if (aiState != AISTATE.MAPCHENGE)
         {
-            if (EnemyCtrl.IsEnable_AntiAirCraft())
+            if (EnemyCtrl_antiFly.IsEnable_AntiAirCraft())
             {
                 aiUpdateOrg_attack.SetNowAction("antiFly");
                 aiUpdateOrg_detect.SetNowAction("antiFly");

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using aojilu;
+[RequireComponent(typeof(MonstarMapChengeCtrl))]
 public class Enemy_akiiroDoragon : EnemyMain_fly
 {
     Vector2? nowTargetPos;
@@ -41,7 +42,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                     rand = GetAIRandaomNumver();
                     nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                 }
-                if (EnemyCtrl.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
+                if (EnemyCtrl_fly.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
                 {
                     SetAIState(AISTATE.WAIT, 2.0f);
                     nowTargetPos = null;
@@ -75,13 +76,13 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                 }
                 break;
             case AISTATE.APPROACH_WALK:
-                if (EnemyCtrl.MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
+                if (EnemyCtrl_fly.MoveToPlayer_X(10.0f, moveSpeed * 0.5f))
                 {
                     SetAIState(AISTATE.ATTACK, 20.0f);
                 }
                 break;
             case AISTATE.APPROACH_DASH:
-                if (EnemyCtrl.MoveToPlayer_X(10.0f, moveSpeed))
+                if (EnemyCtrl_fly.MoveToPlayer_X(10.0f, moveSpeed))
                 {
                     SetAIState(AISTATE.ATTACK, 20.0f);
                 }
@@ -99,20 +100,20 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
         float rand = GetAIRandaomNumver();
         if (rand < AddAIProbNum(aiStateFrontPl_dash))
         {
-            EnemyCtrl.SetDirectionToPl();
+            EnemyCtrl_fly.SetDirectionToPl();
             animator.SetTrigger("At_dash");
             StartAttack();
         }
         else if(rand<AddAIProbNum(aiStateFrontPl_head))
         {
-            if (EnemyCtrl.IsPlayerFront())
+            if (EnemyCtrl_fly.IsPlayerFront())
             {
                 animator.SetTrigger("At_head");
                 StartAttack();
             }
         }else if (rand < AddAIProbNum(aiStateFrontPl_tail))
         {
-            if (!EnemyCtrl.IsPlayerFront())
+            if (!EnemyCtrl_fly.IsPlayerFront())
             {
                 animator.SetTrigger("At_tail");
                 StartAttack();
@@ -126,14 +127,14 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
         if (IsFixedRandomNumber) return;
         if (FlyMode)
         {
-            if (EnemyCtrl.MoveToHigher(FlyHight, MoveSpeedY))
+            if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
             {
                 EndSwichFlyMode();
             }
         }
         else
         {
-            if (EnemyCtrl.MoveToLower(FlyHight_land, MoveSpeedY))
+            if (EnemyCtrl_fly.MoveToLower(FlyHight_land, MoveSpeedY))
             {
                 animator.SetTrigger("landing");
                 SetRandFiexed(110.0f);
@@ -156,7 +157,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                 }
                 break;
             case AISTATE.APPROACH_DASH:
-                if (EnemyCtrl.MoveToPlayer_X(10.0f, moveSpeed))
+                if (EnemyCtrl_fly.MoveToPlayer_X(10.0f, moveSpeed))
                 {
                     SetAIState(AISTATE.WAIT, 1.0f);
                 }
@@ -164,9 +165,9 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
             case AISTATE.ESCAPE_DASH:
                 if (nowTargetPos == null)
                 {
-                    nowTargetPos = EnemyCtrl.GetPlPosition() + new Vector2(10.0f, 0);
+                    nowTargetPos = EnemyCtrl_fly.GetPlPosition() + new Vector2(10.0f, 0);
                 }
-                if (EnemyCtrl.MoveToTarget_X_reverse(1.0f,(Vector2)nowTargetPos, moveSpeed))
+                if (EnemyCtrl_fly.MoveToTarget_X_reverse(1.0f,(Vector2)nowTargetPos, moveSpeed))
                 {
                     nowTargetPos = null;
                     SetAIState(AISTATE.WAIT, 1.0f);
