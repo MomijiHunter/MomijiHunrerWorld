@@ -48,7 +48,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
                     SetRandFiexed(GetAIRandaomNumver());
                     nowTarget = transform.position + new Vector3((RandomFixedNumber>50)?20:-20,0);
                 }
-                if (enemyCtrl.MoveToTarget_X(1.0f, nowTarget, enemyCtrl.MoveSpeed * 0.5f))
+                if (EnemyCtrl.MoveToTarget_X(1.0f, nowTarget, EnemyCtrl.MoveSpeed * 0.5f))
                 {
                     SetAIState(AISTATE.WAIT, 2.0f);
                 }
@@ -78,19 +78,19 @@ public class Enemy_tutiiroDoragon : EnemyMain
                 }
                 break;
             case AISTATE.APPROACH_WALK:
-                if (enemyCtrl.MoveToPlayer_X(10.0f, enemyCtrl.MoveSpeed * 0.5f))
+                if (EnemyCtrl.MoveToPlayer_X(10.0f, EnemyCtrl.MoveSpeed * 0.5f))
                 {
                     SetAIState(AISTATE.ATTACK, 4.0f);
                 }
                 break;
             case AISTATE.APPROACH_DASH:
-                if (enemyCtrl.MoveToPlayer_X(10.0f, enemyCtrl.MoveSpeed ))
+                if (EnemyCtrl.MoveToPlayer_X(10.0f, EnemyCtrl.MoveSpeed ))
                 {
                     SetAIState(AISTATE.ATTACK, 4.0f);
                 }
                 break;
             case AISTATE.ESCAPE_DASH:
-                if(enemyCtrl.EscapeToPlayer_X(60.0f, enemyCtrl.MoveSpeed))
+                if(EnemyCtrl.EscapeToPlayer_X(60.0f, EnemyCtrl.MoveSpeed))
                 {
                     SetAIState(AISTATE.WAIT, 3.0f);
                 }
@@ -108,19 +108,19 @@ public class Enemy_tutiiroDoragon : EnemyMain
         float rand = GetAIRandaomNumver();
         if (rand < aiStateFrontPl_dash)
         {
-            enemyCtrl.SetDirectionToPl();
+            EnemyCtrl.SetDirectionToPl();
             animator.SetTrigger("attack2");
             StartAttack();
         }
         else if (rand < AiStateFrontPl_head)
         {
-            if (!enemyCtrl.IsPlayerFront()) return;
+            if (!EnemyCtrl.IsPlayerFront()) return;
             animator.SetTrigger("attack1");
             StartAttack();
         }
         else if (rand < AiStateFrontPl_tail)
         {
-            if (enemyCtrl.IsPlayerFront()) return;
+            if (EnemyCtrl.IsPlayerFront()) return;
             animator.SetTrigger("attack3");
             StartAttack();
         }

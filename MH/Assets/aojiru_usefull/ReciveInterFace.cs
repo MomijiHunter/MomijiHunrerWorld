@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 
 namespace aojilu
 {
+    /// <summary>
+    ///damage時のメッセージを送る用のinterface
+    /// </summary>
     public interface ReciveInterFace_damage : IEventSystemHandler
     {
         /// <summary>
@@ -12,10 +15,13 @@ namespace aojilu
         /// </summary>
         void OnReciveDamage();
     }
+    /// <summary>
+    /// マップ変更時のメッセージを送る用のinterface
+    /// </summary>
     public interface ReciveInterFace_mapChenge : IEventSystemHandler
     {
         /// <summary>
-        /// ダメージを食らった時に呼ばれる
+        /// マップ変更時に呼ばれる
         /// </summary>
         void OnReciveMapChenge(MapParent mapParent);
     }

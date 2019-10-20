@@ -1553,7 +1553,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.7427549}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1564,7 +1564,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5, y: 0.5}
+  m_Size: {x: 5, y: 1.9855098}
   m_EdgeRadius: 0
 --- !u!1 &5042119499177562164
 GameObject:
@@ -2378,15 +2378,15 @@ MonoBehaviour:
   currentHP: 20
   stateLog: 0
   nonActive: 0
-  battleType: 0
+  battleType: 1
   detectState: 1
   preDetectLength: 30
   eyeCheckArea: {fileID: 5042119498286870092}
   eyeCheckArea_canHide: {fileID: 4316434375495563978}
   detectCheckArea: {fileID: 5042119499177562167}
   moveSpeed: 10
+  footCollider: {fileID: 5042119498792375861}
   myMomiji: {fileID: 7988901225329313932}
-  attackNow: 0
 --- !u!114 &8828224110624761449
 MonoBehaviour:
   m_ObjectHideFlags: 0

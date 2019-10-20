@@ -8,6 +8,7 @@ using aojilu;
 
 [RequireComponent(typeof(EffectMaker))]
 [RequireComponent(typeof(SEPlayer))]
+[RequireComponent(typeof(DropItemCtrl))]
 public class EnemyController : CharBase
 {
     #region Debug
@@ -18,26 +19,28 @@ public class EnemyController : CharBase
 
     public enum BATTLETYPE
     {
-        DETECT_ATTACK,
-        DAMAGED_ATTACK,
+        DETECT_ATTACK,//発見したら攻撃
+        DAMAGED_ATTACK,//攻撃されたら攻撃
     }
     [SerializeField] protected BATTLETYPE battleType = BATTLETYPE.DETECT_ATTACK;
-
+    #region detect系
     public enum DETECTSTATE
     {
-        DETECT, UNDETECT, PREDETECT
+        DETECT,//発見
+        UNDETECT,//未発見
+        PREDETECT//警戒
     }
     [SerializeField] DETECTSTATE detectState = DETECTSTATE.UNDETECT;
     public DETECTSTATE DetectState { get { return detectState; } }
 
     protected float preDetectTime;//最後に遭遇したタイミング
     [SerializeField] float preDetectLength;//警戒状態が解かれるまでの時間
-    
+    #endregion
 
     #region キャッシュ
     Player player;
-    Transform tr;
-    Transform plTr;
+    protected Transform tr { get; private set; }
+    protected Transform plTr { get; private set; }
     public Animator animator { get; private set; }
     AnimatorStateInfo stateInfo;
     AudioSource audioSource;
@@ -51,22 +54,19 @@ public class EnemyController : CharBase
 
     [SerializeField] protected float moveSpeed;
     public float MoveSpeed { get { return moveSpeed; } }
+
     public bool isGroundead { get; private set; }
     [SerializeField] BoxCollider2D footCollider;
 
     [SerializeField] MomijiAnim myMomiji;
-    #region　外部用フラグ
-    public bool IsChengedDetectState { get; private set; }
-    [SerializeField] bool attackNow = false;
-    public bool AttackNow { get {return attackNow; } }
-    #endregion
+    [SerializeField]private Transform spriteBodyTr;
 
     protected override void Awake()
     {
         base.Awake();
         Init();
     }
-    void Init()
+    protected virtual void Init()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         plTr = player.transform;
@@ -84,7 +84,7 @@ public class EnemyController : CharBase
             DeadAction();
             return;
         }
-        isGroundead = CheckGranudead();
+        GroundUpdate();
         AnimatorUpdate();
     }
     #region detect
@@ -94,11 +94,6 @@ public class EnemyController : CharBase
     /// <param name="state"></param>
     public void SetDetectState(DETECTSTATE state)
     {
-        if (detectState != state)
-        {
-            IsChengedDetectState = true;
-            StartCoroutine(WaitFrameAction(1, () => IsChengedDetectState = false));
-        }
         detectState = state;
     }
 
@@ -180,7 +175,9 @@ public class EnemyController : CharBase
         rb.velocity = new Vector2(speed, rb.velocity.y);
         animator.SetFloat("move", Mathf.Abs(speed / moveSpeed));
     }
-
+    /// <summary>
+    /// 外部からの移動処理の使用
+    /// </summary>
     public void Move_force(float speed)
     {
         Move(speed);
@@ -194,9 +191,7 @@ public class EnemyController : CharBase
     {
         return MoveToTarget_X(distance_target,plTr.position,speed);
     }
-
-
-
+    
     public bool MoveToTarget_X(float distanceTarget, Vector2 targetPos, float speed)
     {
         float distance = Mathf.Abs(targetPos.x - tr.position.x);
@@ -217,9 +212,9 @@ public class EnemyController : CharBase
 
     public bool EscapeToPlayer_X(float distance_target, float speed)
     {
-        return EscapeToTarget_X(distance_target, plTr.position, speed);
+        return EscapeFromTarget_X(distance_target, plTr.position, speed);
     }
-    public bool EscapeToTarget_X(float distanceTarget, Vector2 targetPos, float speed)
+    public bool EscapeFromTarget_X(float distanceTarget, Vector2 targetPos, float speed)
     {
         float distance = Mathf.Abs(targetPos.x - tr.position.x);
         if (distance > distanceTarget)
@@ -263,15 +258,6 @@ public class EnemyController : CharBase
                 tr.localScale = new Vector2(tr.localScale.x * -1, tr.localScale.y);
             }
         }
-    }
-    /// <summary>
-    /// spriteのグローバル座標をそのままに、ローカル座標を元に戻す
-    /// </summary>
-    protected void ReplaceBodyPosition()
-    {
-       /* Vector2 temp = spriteBodyTr.position;
-        tr.position += spriteBodyTr.localPosition;
-        spriteBodyTr.position = temp;*/
     }
     #endregion
     #region Get系
@@ -340,6 +326,11 @@ public class EnemyController : CharBase
     #endregion
     #region 接地系
 
+    void GroundUpdate()
+    {
+        isGroundead = CheckGranudead();
+    }
+
     bool CheckGranudead()
     {
         Collider2D[] cols = Physics2D.OverlapBoxAll(footCollider.transform.position, footCollider.size, 0);
@@ -354,6 +345,17 @@ public class EnemyController : CharBase
     void AnimatorUpdate()
     {
         animator.SetBool("isGrounded", isGroundead);
+    }
+
+
+    /// <summary>
+    /// spriteのグローバル座標をそのままに、ローカル座標を元に戻す
+    /// </summary>
+    protected void AnimEvent_ReplaceBodyPosition()
+    {
+        Vector2 temp = spriteBodyTr.position;
+         tr.position += spriteBodyTr.localPosition;
+         spriteBodyTr.position = temp;
     }
     #endregion
     /// <summary>
@@ -376,6 +378,9 @@ public class EnemyController : CharBase
         ua.Invoke();
     }
     #region sendMessage
+    /// <summary>
+    /// ダメージメッセージを自信に送る
+    /// </summary>
     void SendMessage_OnReciveDamage()
     {
         ExecuteEvents.Execute<ReciveInterFace_damage>(

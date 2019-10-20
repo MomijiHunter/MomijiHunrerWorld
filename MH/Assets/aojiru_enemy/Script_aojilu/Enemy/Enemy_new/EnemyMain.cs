@@ -6,11 +6,12 @@ using aojilu;
 
 public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_mapChenge
 {
-    protected EnemyController enemyCtrl { get; private set; }
+    #region キャッシュ
+    protected EnemyController EnemyCtrl { get; private set; }
     protected MonstarMapChengeCtrl mapChengeCtrl { get; private set; }
-    
-    EnemyController.DETECTSTATE detectState { get { return enemyCtrl.DetectState; } set { enemyCtrl.SetDetectState(value); } }
-    
+    protected Animator animator { get { return EnemyCtrl.animator; } }
+    #endregion
+    #region AI
     public enum AISTATE
     {
         AISELECT,
@@ -23,12 +24,18 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     }
     [SerializeField]protected AISTATE aiState;
     public AISTATE AiState { get { return aiState; } }
-
     float aiStartTime;//今のステイとになった時刻
     float aiWaitLength;//今のステイとを続ける時間
 
-    protected Animator animator { get { return enemyCtrl.animator; } }
-    protected float moveSpeed { get { return enemyCtrl.MoveSpeed; } }
+    #region 
+    protected AIActionOrganaizer aiUpdateOrg_attack = new AIActionOrganaizer();
+    protected AIActionOrganaizer aiUpdateOrg_detect = new AIActionOrganaizer();
+    #endregion
+
+    float aiProbabilityNumber;//AIの確率処理に使う番号
+    #endregion
+    EnemyController.DETECTSTATE detectState { get { return EnemyCtrl.DetectState; } set { EnemyCtrl.SetDetectState(value); } }
+    protected float moveSpeed { get { return EnemyCtrl.MoveSpeed; } }
     public bool MapChengeEnable { get { return mapChengeCtrl!=null&&mapChengeCtrl.MapChengeEnable; } }
     #region 乱数系
     [SerializeField] float? randomFixedNumber = null;//乱数を固定したときの値
@@ -36,20 +43,21 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     protected bool IsFixedRandomNumber { get { return randomFixedNumber != null; } }
     #endregion
 
-    protected bool attackNow { get; private set; }
+    protected bool attackNow { get; private set; }//攻撃中かどうか
     float? fixedSpeed;//nullじゃないなら速度を固定する
 
     #region MonoBehaviour
-    private void Awake()
+    protected virtual void Awake()
     {
-        enemyCtrl = GetComponent<EnemyController>();
+        EnemyCtrl = GetComponent<EnemyController>();
         mapChengeCtrl = GetComponent<MonstarMapChengeCtrl>();
+        InitAIUpdateAction();
     }
 
     private void Update()
     {
-        if (enemyCtrl.IsDeadSelf()) return;
-        if (fixedSpeed != null) enemyCtrl.Move_force((float)fixedSpeed);
+        if (EnemyCtrl.IsDeadSelf()) return;
+        if (fixedSpeed != null) EnemyCtrl.Move_force((float)fixedSpeed);
         PreAIAction();
         AIUpdte();
         DetectUpdate();
@@ -62,6 +70,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     void PreAIAction()
     {
         PreAIAction_detect();
+        PreAIAction_aiState();
     }
 
     /// <summary>
@@ -70,7 +79,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     void AISelectDisturb()
     {
         AISelectDisturb_detect();
-        ChengedAISelectAction();
+        AISelectDisturb_aiState();
     }
     #endregion
     #region detect
@@ -83,7 +92,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
             case EnemyController.DETECTSTATE.PREDETECT:
                 break;
             case EnemyController.DETECTSTATE.DETECT:
-                enemyCtrl.PredetectUpdate();
+                EnemyCtrl.PredetectUpdate();
                 break;
         }
     }
@@ -93,14 +102,14 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         switch (detectState)
         {
             case EnemyController.DETECTSTATE.UNDETECT:
-                if (enemyCtrl.IsInSight())
+                if (EnemyCtrl.IsInSight())
                 {
                     detectState = EnemyController.DETECTSTATE.DETECT;
                     DetectAction();
                 }
                 break;
             case EnemyController.DETECTSTATE.PREDETECT:
-                if (enemyCtrl.IsInSight())
+                if (EnemyCtrl.IsInSight())
                 {
                     detectState = EnemyController.DETECTSTATE.DETECT;
                     DetectAction();
@@ -122,13 +131,13 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
             case EnemyController.DETECTSTATE.UNDETECT:
                 break;
             case EnemyController.DETECTSTATE.PREDETECT:
-                if (enemyCtrl.IsEndPreDetect())
+                if (EnemyCtrl.IsEndPreDetect())
                 {
                     detectState = EnemyController.DETECTSTATE.UNDETECT;
                 }
                 break;
             case EnemyController.DETECTSTATE.DETECT:
-                if (!enemyCtrl.IsInSight())
+                if (!EnemyCtrl.IsInSight())
                 {
                     detectState = EnemyController.DETECTSTATE.PREDETECT;
                 }
@@ -153,13 +162,13 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
     void AIUpdte()
     {
-        if (Time.fixedTime > aiStartTime + aiWaitLength)
+        if (Time.fixedTime > aiStartTime + aiWaitLength)//呼び出し時の時間をオーバーした場合はAISelectに戻る
         {
             SetAIState(AISTATE.AISELECT, 1.0f);
             return;
         }
 
-        if (mapChengeCtrl!=null&&aiState == AISTATE.MAPCHENGE)
+        if (mapChengeCtrl!=null&&aiState == AISTATE.MAPCHENGE)//map変更AI時
         {
             AIUpdate_mapChenge();
             return;
@@ -169,31 +178,21 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         {
             case EnemyController.DETECTSTATE.UNDETECT:
             case EnemyController.DETECTSTATE.PREDETECT:
-                AIUpdate_undetect();
+                AIUpdate_undetect();//未発見
                 break;
             case EnemyController.DETECTSTATE.DETECT:
-                if (aiState == AISTATE.ATTACK)
+                if (aiState == AISTATE.ATTACK)//攻撃
                 {
                     if (attackNow) return;
-                    AIUpdate_attack();
+                    aiUpdateOrg_attack.GetNowAction().Invoke();
+                    //AIUpdate_attack();
                 }
                 else
                 {
-                    AIUpdate_detect();
+                    //AIUpdate_detect();//非攻撃時、発見状態
+                    aiUpdateOrg_detect.GetNowAction().Invoke();
                 }
                 break;
-        }
-    }
-    /// <summary>
-    /// AIStateがAISELECTになった時に呼ばれる関数
-    /// AISELECTの時は常にアニメーションが終了している
-    /// </summary>
-    void ChengedAISelectAction()
-    {
-        if (aiState != AISTATE.AISELECT) return;
-        if (mapChengeCtrl!=null&&mapChengeCtrl.MapChengeEnable)
-        {
-            SetAIState(AISTATE.MAPCHENGE, 60.0f);
         }
     }
 
@@ -215,6 +214,15 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     protected virtual void AIUpdate_mapChenge()
     {
     }
+
+    protected virtual void InitAIUpdateAction()
+    {
+        aiUpdateOrg_attack.AddAction("attack", ()=>AIUpdate_attack());
+        aiUpdateOrg_attack.SetNowAction("attack");
+        aiUpdateOrg_detect.AddAction("detect", ()=>AIUpdate_detect());
+        aiUpdateOrg_detect.SetNowAction("detect");
+    }
+    
     #endregion
     #region AIState
     /// <summary>
@@ -244,11 +252,45 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     }
 
     /// <summary>
+    /// AIStateがAISELECTになった時に呼ばれる関数
+    /// aiStateの処理をしている
+    /// </summary>
+    virtual protected void AISelectDisturb_aiState()
+    {
+        if (aiState != AISTATE.AISELECT) return;
+        if (mapChengeCtrl != null && mapChengeCtrl.MapChengeEnable)
+        {
+            SetAIState(AISTATE.MAPCHENGE, 60.0f);
+        }
+    }
+
+    void PreAIAction_aiState()
+    {
+        ResetAiProbNum();
+    }
+    /// <summary>
+    /// 確率の値を追加し、追加後の値を返す
+    /// </summary>
+    protected float AddAIProbNum(float f)
+    {
+        aiProbabilityNumber += f;
+        return aiProbabilityNumber;
+    }
+
+    void ResetAiProbNum()
+    {
+        aiProbabilityNumber = 0;
+    }
+    /// <summary>
     /// 敵を発見したときの処理
     /// </summary>
     void DetectAction()
     {
-        enemyCtrl.DetectAction();
+        EnemyCtrl.DetectAction();
+        SetAIState(AISTATE.WAIT, 3.0f);
+    }
+    public void ReciveMapChenge_aiState()
+    {
         SetAIState(AISTATE.WAIT, 3.0f);
     }
     /// <summary>
@@ -268,10 +310,14 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         attackNow = false;
         animator.SetBool("attackEnd", true);
         ResetFixedSpeed();
-        enemyCtrl.StopMove();
+        EnemyCtrl.StopMove();
         SetAIState(AISTATE.WAIT, 1.0f);
     }
-
+    
+    public void SetEndAttack(float f)
+    {
+        StartCoroutine( EnemyCtrl.WaitTimeAction(f, () => EndAttack()));
+    }
     /// <summary>
     /// アニメーションが終了したときに呼ぶと特定の処理をする
     /// </summary>
@@ -280,15 +326,6 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
     }
 
-    public void SetEndAttack(float f)
-    {
-        StartCoroutine( enemyCtrl.WaitTimeAction(f, () => EndAttack()));
-    }
-
-    public void ReciveMapChenge_aiState()
-    {
-        SetAIState(AISTATE.WAIT, 3.0f);
-    }
     #endregion
     #region 動作関連
     public void SetFixedSpeed(float speed)
