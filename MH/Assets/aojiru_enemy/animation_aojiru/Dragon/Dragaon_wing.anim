@@ -1677,8 +1677,8 @@ AnimationClip:
     floatParameter: 10
     intParameter: 0
     messageOptions: 0
-  - time: 0.6666667
-    functionName: AddCounter
+  - time: 0.33333334
+    functionName: EndAnimation
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

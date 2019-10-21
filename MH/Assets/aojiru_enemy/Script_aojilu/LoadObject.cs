@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace aojilu {
     public class LoadObject : MonoBehaviour
@@ -10,9 +11,10 @@ namespace aojilu {
         public Transform FrontTr { get { return frontTr; } }
 
         [SerializeField] LoadObject chengeTarget;
-        [SerializeField] LoadObject[] nextObj;
+        //[SerializeField] LoadObject[] nextObj;
 
-        [SerializeField] GameObject myMap;
+        [SerializeField] MapParent myMap;
+        public MapParent MyMap { get { return myMap; } }
         public string MyMapName { get { return myMap.name; } }
 
         private void Awake()
@@ -36,11 +38,12 @@ namespace aojilu {
         {
             if (col.gameObject.tag == "Enemy")
             {
-                var eb = col.gameObject.GetComponent<EnemyBase>();
-                if (eb.ChengeAreaEnable && eb.AiState == EnemyBase.AISTATE.MAPCHENGE)
+                var eb = col.gameObject.GetComponent<EnemyMain>();
+                if (eb.MapChengeEnable && eb.AiState == EnemyMain.AISTATE.MAPCHENGE)
                 {
                     ChengeToTarget(col.transform);
-                    eb.SetChengeMapData(RandomObj());
+                    //eb.SetChengeMapData(RandomObj());
+                    SendMessage_OnReciveMapChenge(col.gameObject);
                 }
             }
         }
@@ -50,10 +53,20 @@ namespace aojilu {
             tr.position = chengeTarget.frontTr.position;
         }
 
-        LoadObject RandomObj()
+        /*LoadObject RandomObj()
         {
             int r = (int)Random.Range(0, nextObj.Length);
             return nextObj[r];
+        }*/
+
+        void SendMessage_OnReciveMapChenge(GameObject obj)
+        {
+            ExecuteEvents.Execute<ReciveInterFace_mapChenge>(
+                target: obj,
+                eventData: null,
+                functor: (reciever, eventData) => reciever.OnReciveMapChenge(chengeTarget.MyMap)
+                );
         }
+
     }
 }
