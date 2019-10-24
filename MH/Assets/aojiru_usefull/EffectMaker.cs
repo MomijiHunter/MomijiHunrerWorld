@@ -7,7 +7,7 @@ namespace aojilu
 {
     public class EffectMaker : MonoBehaviour
     {
-        [SerializeField] Transform effectPosition;
+        [SerializeField] protected Transform effectPosition;
 
         [SerializeField] GameObject[] effectPrefabs;
 

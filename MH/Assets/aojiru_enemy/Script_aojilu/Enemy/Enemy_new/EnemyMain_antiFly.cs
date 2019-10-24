@@ -36,8 +36,8 @@ public class EnemyMain_antiFly : EnemyMain
             }
             else
             {
-                aiUpdateOrg_attack.SetNowAction("attack");
-                aiUpdateOrg_detect.SetNowAction("detect");
+                aiUpdateOrg_attack.SetNowAction("default");
+                aiUpdateOrg_detect.SetNowAction("default");
                 isAntiArealMode = false;
             }
         }

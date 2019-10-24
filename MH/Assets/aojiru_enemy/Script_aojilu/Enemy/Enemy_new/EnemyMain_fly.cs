@@ -20,6 +20,7 @@ public class EnemyMain_fly : EnemyMain
     /// trueの時遷移処理Updateが呼ばれるようになる
     /// </summary>
     bool swichFlyMode = false;
+   [SerializeField] bool heightModify = false;
 
     protected override void Awake()
     {
@@ -32,7 +33,19 @@ public class EnemyMain_fly : EnemyMain
         base.InitAIUpdateAction();
         aiUpdateOrg_attack.AddAction("fly", () => AIUpdate_fly_attack());
         aiUpdateOrg_detect.AddAction("fly", () => AIUpdate_fly_detect());
-        aiUpdateOrg_detect.AddAction("fly_not", () => AIUpdate_notSuitableFLy());
+        aiUpdateOrg_undetect.AddAction("fly", () => AIUpdate_fly_unDetect());
+
+        aiUpdateOrg_attack.AddAction("fly_swich", () => AIUpdate_swichFly());
+        aiUpdateOrg_detect.AddAction("fly_swich", () => AIUpdate_swichFly());
+        aiUpdateOrg_undetect.AddAction("fly_swich", () => AIUpdate_swichFly());
+
+        aiUpdateOrg_attack.AddAction("fly_modify", () => AIUpdate_modifiHeight());
+        aiUpdateOrg_detect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
+        aiUpdateOrg_undetect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
+    }
+
+    virtual protected void AIUpdate_fly_unDetect()
+    {
 
     }
 
@@ -43,87 +56,145 @@ public class EnemyMain_fly : EnemyMain
 
     virtual protected void AIUpdate_fly_attack()
     {
-
     }
 
     /// <summary>
-    /// 飛行フラグと飛行状態があっていないときの処理
+    /// 飛行状態の遷移処理
     /// </summary>
-    virtual protected void AIUpdate_notSuitableFLy()
+    virtual protected void AIUpdate_swichFly()
     {
 
+    }
+
+    void AIUpdate_modifiHeight()
+    {
+        if (EnemyCtrl_fly.MoveToTarget_Y(flyHight, MoveSpeedY))
+        {
+            SetAIState(AISTATE.AISELECT, 3.0f);
+            heightModify = false;
+        }
     }
 
     protected override void AISelectDisturb_aiState()
     {
         base.AISelectDisturb_aiState();
+
+        if (Mathf.Abs( EnemyCtrl_fly.GetDistanceGround()- flyHight) > 1.0f)
+        {
+            heightModify = true;
+        }
+
         if (aiState != AISTATE.MAPCHENGE)
         {
             if (swichFlyMode)//飛行遷移処理
             {
-                aiUpdateOrg_detect.SetNowAction("fly_not");
+                AIOrgSetNowAction("fly_swich");
             }
-             else if (flyMode)//飛行処理
-            { 
-                aiUpdateOrg_attack.SetNowAction("fly");
-                aiUpdateOrg_detect.SetNowAction("fly");
+            else if (flyMode)//飛行処理
+            {
+                if (heightModify)
+                {
+                    AIOrgSetNowAction("fly_modify");
+                }
+                else
+                {
+                    AIOrgSetNowAction("fly");
+                }
             }
             else//地上処理
             {
-
-                aiUpdateOrg_attack.SetNowAction("attack");
-                aiUpdateOrg_detect.SetNowAction("detect");
+                AIOrgSetNowAction("default");
             }
         }
     }
 
     /// <summary>
-    /// 飛行状態の開始　animation待ちをする
+    /// 飛行状態の開始　遷移処理に移行する
     /// </summary>
-    protected void StartFlyMode()
+    protected void FlyMode_start()
     {
-        animator.SetTrigger("takeOff");
-        SetRandFiexed(110);
-        EnemyCtrl_fly.StopMove();
+        flyMode = true;
+        StartSwichFlyMode();
     }
 
     /// <summary>
     /// 飛行状態の終了　遷移処理に移行する
     /// </summary>
-    protected void EndFlyMode()
+    protected void FlyMode_end()
     {
         flyMode = false;
-        EnemyCtrl_fly.StopMove();
-        SetSwichFlyMode(true);
+        StartSwichFlyMode();
     }
 
-    void SetSwichFlyMode(bool flag)
+    /// <summary>
+    /// swichFlyModeの終了処理
+    /// FlyModeの変更時に呼ばれる
+    /// </summary>
+    void StartSwichFlyMode()
     {
-        swichFlyMode = flag;
+        swichFlyMode = true;
+        SetAIState(AISTATE.AISELECT, 3.0f);//swichFlyのAI関数に入るための処理
+        EnemyCtrl_fly.StopMove();
+        if (flyMode)//上昇時は最初にanimationを呼ぶ
+        {
+            StartFlyAnimation();
+        }
     }
 
+    /// <summary>
+    /// swichFlyModeの終了処理
+    /// AIで条件を判定して呼ぶ
+    /// </summary>
     protected void EndSwichFlyMode()
     {
-        SetSwichFlyMode(false);
+        swichFlyMode = false;
+        EnemyCtrl_fly.StopMove();
+        EnemyCtrl_fly.StopMove_Y();
+        if (flyMode)//上昇時はここで飛行処理終了
+        {
+            SetAIState(AISTATE.AISELECT, 3.0f);
+        }
+        else//下降時は最後にanimationを呼ぶ
+        {
+            StartFlyAnimation();
+        }
     }
 
     #region animationEvent
 
-    public void AnimEvent_StartFlyMode()
+    /// <summary>
+    /// flyAnimationの開始
+    /// </summary>
+    void StartFlyAnimation()
     {
-        EnemyCtrl_fly.GravityOff();
-        SetSwichFlyMode(true);
-        flyMode = true;
-        SetAIState(AISTATE.AISELECT, 3.0f);
-        ResetRandFiexed();
+        SetAIStop(true);
+        if (flyMode)
+        {
+            animator.SetTrigger("takeOff");
+        }
+        else
+        {
+            animator.SetTrigger("landing");
+        }
     }
 
-    public void AnimEvent_EndFlyMode()
+    /// <summary>
+    /// flyAnimationの終了処理　
+    /// animationから呼ぶ
+    /// </summary>
+    public void EndFlyAnimation()
     {
-        EnemyCtrl_fly.GravityOn();
-        SetSwichFlyMode(false);
-        ResetRandFiexed();
-        SetAIState(AISTATE.AISELECT, 3.0f);
+        StartCoroutine( EnemyCtrl.WaitFrameAction(1,()=> SetAIStop(false)));
+        EnemyCtrl.AnimEvent_ReplaceBodyPosition();
+        if (flyMode)
+        {
+            EnemyCtrl_fly.GravityOff();
+        }
+        else//下降時時はここで飛行処理終了
+        {
+            SetAIState(AISTATE.AISELECT, 3.0f);
+            EnemyCtrl_fly.GravityOn();
+        }
     }
     
     #endregion

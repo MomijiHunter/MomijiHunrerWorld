@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 855180e68c3a5d94bb4f4ee18a782495
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - effectPosition: {instanceID: 0}
+  - fire: {fileID: -9128362477977420605, guid: 0cdab5fa1aed5604f9e6f4c107b16326, type: 3}
+  - fireBunretu: {fileID: 125151666687077087, guid: 62b6cf805d17a934d8781a11a80491f4,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

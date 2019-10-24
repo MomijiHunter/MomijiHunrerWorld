@@ -25,4 +25,5 @@ namespace aojilu
         /// </summary>
         void OnReciveMapChenge(MapParent mapParent);
     }
+    
 }

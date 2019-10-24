@@ -351,12 +351,13 @@ public class EnemyController : CharBase
     /// <summary>
     /// spriteのグローバル座標をそのままに、ローカル座標を元に戻す
     /// </summary>
-    protected void AnimEvent_ReplaceBodyPosition()
+    public void AnimEvent_ReplaceBodyPosition()
     {
         Vector2 temp = spriteBodyTr.position;
-         tr.position += spriteBodyTr.localPosition;
+         tr.position = spriteBodyTr.position;
          spriteBodyTr.position = temp;
     }
+    
     #endregion
     /// <summary>
     /// 指定時間後に関数を実行

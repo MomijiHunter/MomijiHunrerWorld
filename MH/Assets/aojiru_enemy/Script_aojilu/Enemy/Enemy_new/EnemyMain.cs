@@ -27,16 +27,22 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     float aiStartTime;//今のステイとになった時刻
     float aiWaitLength;//今のステイとを続ける時間
 
+    protected bool StopAIAction { get; private set; }
     #region 
+
+    List<AIActionOrganaizer> aiOrgList = new List<AIActionOrganaizer>();
+    protected AIActionOrganaizer aiUpdateOrg_undetect = new AIActionOrganaizer();
     protected AIActionOrganaizer aiUpdateOrg_attack = new AIActionOrganaizer();
     protected AIActionOrganaizer aiUpdateOrg_detect = new AIActionOrganaizer();
     #endregion
 
     float aiProbabilityNumber;//AIの確率処理に使う番号
     #endregion
+    #region ショートカット
     EnemyController.DETECTSTATE detectState { get { return EnemyCtrl.DetectState; } set { EnemyCtrl.SetDetectState(value); } }
     protected float moveSpeed { get { return EnemyCtrl.MoveSpeed; } }
     public bool MapChengeEnable { get { return mapChengeCtrl!=null&&mapChengeCtrl.MapChengeEnable; } }
+    #endregion
     #region 乱数系
     [SerializeField] float? randomFixedNumber = null;//乱数を固定したときの値
     protected float? RandomFixedNumber { get { return randomFixedNumber; } }//乱数を固定したときの値
@@ -52,6 +58,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         EnemyCtrl = GetComponent<EnemyController>();
         mapChengeCtrl = GetComponent<MonstarMapChengeCtrl>();
         InitAIUpdateAction();
+        StopAIAction = false;
     }
 
     private void Update()
@@ -162,6 +169,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
     void AIUpdte()
     {
+        if (StopAIAction) return;
+
         if (Time.fixedTime > aiStartTime + aiWaitLength)//呼び出し時の時間をオーバーした場合はAISelectに戻る
         {
             SetAIState(AISTATE.AISELECT, 1.0f);
@@ -178,7 +187,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         {
             case EnemyController.DETECTSTATE.UNDETECT:
             case EnemyController.DETECTSTATE.PREDETECT:
-                AIUpdate_undetect();//未発見
+                //AIUpdate_undetect();//未発見
+                aiUpdateOrg_undetect.GetNowAction().Invoke();
                 break;
             case EnemyController.DETECTSTATE.DETECT:
                 if (aiState == AISTATE.ATTACK)//攻撃
@@ -217,12 +227,39 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
     protected virtual void InitAIUpdateAction()
     {
-        aiUpdateOrg_attack.AddAction("attack", ()=>AIUpdate_attack());
-        aiUpdateOrg_attack.SetNowAction("attack");
-        aiUpdateOrg_detect.AddAction("detect", ()=>AIUpdate_detect());
-        aiUpdateOrg_detect.SetNowAction("detect");
+        aiOrgList.Add(aiUpdateOrg_attack);
+        aiOrgList.Add(aiUpdateOrg_undetect);
+        aiOrgList.Add(aiUpdateOrg_detect);
+
+        aiUpdateOrg_attack.AddAction("default", ()=>AIUpdate_attack());
+        aiUpdateOrg_attack.SetNowAction("default");
+        aiUpdateOrg_detect.AddAction("default", ()=>AIUpdate_detect());
+        aiUpdateOrg_detect.SetNowAction("default");
+        aiUpdateOrg_undetect.AddAction("default",()=>AIUpdate_undetect());
+        aiUpdateOrg_undetect.SetNowAction("default");
+    }
+
+    /// <summary>
+    /// AIOrgの一括変更
+    /// </summary>
+    /// <param name="key"></param>
+    protected void AIOrgSetNowAction(string key)
+    {
+        foreach(var act in aiOrgList)
+        {
+            act.SetNowAction(key);
+        }
     }
     
+    /// <summary>
+    /// trueならAI関数の呼び出しをやめる
+    /// </summary>
+    /// <param name="flag"></param>
+    protected void SetAIStop(bool flag)
+    {
+        StopAIAction = flag;
+        EnemyCtrl.StopMove();
+    }
     #endregion
     #region AIState
     /// <summary>
@@ -311,9 +348,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         animator.SetBool("attackEnd", true);
         ResetFixedSpeed();
         EnemyCtrl.StopMove();
-        SetAIState(AISTATE.WAIT, 1.0f);
+        SetAIState(AISTATE.WAIT, 2.0f);
     }
-    
     public void SetEndAttack(float f)
     {
         StartCoroutine( EnemyCtrl.WaitTimeAction(f, () => EndAttack()));
