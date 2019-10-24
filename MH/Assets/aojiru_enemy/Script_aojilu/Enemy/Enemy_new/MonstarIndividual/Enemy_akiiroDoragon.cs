@@ -20,9 +20,19 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     [SerializeField,Space(10)] float aiStateFrontPl_dash;
     [SerializeField] float aiStateFrontPl_head;
     [SerializeField] float aiStateFrontPl_tail;
-    
+    [SerializeField] float aiStateFrontPl_fire;
+
+    [SerializeField, Space(10)] float aiStateFly_approch;
+    [SerializeField] float aiStateFly_escape;
+    [SerializeField] float aiStateFly_attack;
+    [SerializeField] float aiStateFly_flyEnd;
+
+    [SerializeField, Space(10)] float aiStateFlyAt_dive;
+    [SerializeField] float aiStateFlyAt_fire;
+
     #endregion
     #region AI
+    #region defaultAI
     protected override void AIUpdate_undetect()
     {
         base.AIUpdate_undetect();
@@ -67,7 +77,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                 else if (rand < AddAIProbNum(aiStateNum_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
                 else if (rand < AddAIProbNum(aiStateNum_fly))
                 {
-                    StartFlyMode();
+                    FlyMode_start();
                 }
                 else if(rand<100)
                 {
@@ -118,13 +128,20 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                 animator.SetTrigger("At_tail");
                 StartAttack();
             }
+        }else if (rand < AddAIProbNum(aiStateFrontPl_fire))
+        {
+
+            if (EnemyCtrl_fly.IsPlayerFront())
+            {
+                animator.SetTrigger("At_fire");
+                StartAttack();
+            }
         }
     }
-
-    protected override void AIUpdate_notSuitableFLy()
+    #endregion
+    protected override void AIUpdate_swichFly()
     {
-        base.AIUpdate_notSuitableFLy();
-        if (IsFixedRandomNumber) return;
+        base.AIUpdate_swichFly();
         if (FlyMode)
         {
             if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
@@ -136,10 +153,15 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
         {
             if (EnemyCtrl_fly.MoveToLower(FlyHight_land, MoveSpeedY))
             {
-                animator.SetTrigger("landing");
-                SetRandFiexed(110.0f);
+                EndSwichFlyMode();
             }
         }
+    }
+    #region flyAI
+    protected override void AIUpdate_fly_unDetect()
+    {
+        base.AIUpdate_fly_unDetect();
+        FlyMode_end();
     }
 
     protected override void AIUpdate_fly_detect()
@@ -149,29 +171,47 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
         switch (aiState)
         {
             case AISTATE.AISELECT:
-                if (rand < AddAIProbNum(30.0f)) SetAIState(AISTATE.APPROACH_DASH, 3.0f);
-                //else if (rand < AddAIProbNum(30.0f)) SetAIState(AISTATE.ESCAPE_DASH, 3.0f);
-                else if (rand < AddAIProbNum(30.0f))
+                if (EnemyCtrl_fly.GetDistanceGround() < FlyHight)
                 {
-                    EndFlyMode();
+                    if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
+                    {
+                        EnemyCtrl_fly.StopMove_Y();
+                        EnemyCtrl_fly.StopMove();
+                    }
+                    else return;
+                }
+                else if (rand < AddAIProbNum(aiStateFly_approch)) SetAIState(AISTATE.APPROACH_DASH, 5.0f);
+                else if (rand < AddAIProbNum(aiStateFly_escape)) SetAIState(AISTATE.ESCAPE_DASH, 2.0f);
+                else if (rand < AddAIProbNum(aiStateFly_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
+                else if (rand < AddAIProbNum(aiStateFly_flyEnd))
+                {
+                    FlyMode_end();
                 }
                 break;
             case AISTATE.APPROACH_DASH:
                 if (EnemyCtrl_fly.MoveToPlayer_X(10.0f, moveSpeed))
                 {
-                    SetAIState(AISTATE.WAIT, 1.0f);
+                    SetAIState(AISTATE.ATTACK, 20.0f);
                 }
                 break;
             case AISTATE.ESCAPE_DASH:
                 if (nowTargetPos == null)
                 {
-                    nowTargetPos = EnemyCtrl_fly.GetPlPosition() + new Vector2(10.0f, 0);
+                    if (EnemyCtrl_fly.GetDistancePlayer_X() > 40.0f)
+                    {
+                        SetAIState(AISTATE.APPROACH_DASH,5.0f);
+                        return;
+                    }
+                    EnemyCtrl_fly.SetDirectionToPl();
+                    nowTargetPos = EnemyCtrl_fly.GetPostionFromPl_NearMe(40.0f);
                 }
-                if (EnemyCtrl_fly.MoveToTarget_X_reverse(1.0f,(Vector2)nowTargetPos, moveSpeed))
+                if (EnemyCtrl_fly.MoveToTarget_X_reverse(1.0f,(Vector2)nowTargetPos, moveSpeed*0.8f))
                 {
                     nowTargetPos = null;
-                    SetAIState(AISTATE.WAIT, 1.0f);
+                    SetAIState(AISTATE.ATTACK, 20.0f);
                 }
+                break;
+            case AISTATE.WAIT:
                 break;
         }
     }
@@ -179,6 +219,21 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_fly_attack()
     {
         base.AIUpdate_fly_attack();
+        float rand = GetAIRandaomNumver();
+        if (rand < AddAIProbNum(aiStateFlyAt_dive))
+        {
+            EnemyCtrl_fly.SetDirectionToPl();
+            animator.SetTrigger("At_dive");
+            StartAttack();
+        }else if (rand < AddAIProbNum(aiStateFlyAt_fire))
+        {
+
+            EnemyCtrl_fly.SetDirectionToPl();
+            animator.SetTrigger("At_fire_sky");
+            StartAttack();
+        }
     }
     #endregion
+    #endregion
+    
 }

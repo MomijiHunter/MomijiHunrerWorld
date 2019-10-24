@@ -32,6 +32,30 @@ public class EnemyController_fly : EnemyController
         Move_Y(0);
     }
 
+    public bool MoveToTarget_Y(float higher,float speed)
+    {
+        float nowDist = GetDistanceGround() - higher;
+        if (Mathf.Abs( nowDist) <= 0.5f)
+        {
+            StopMove_Y();
+            tr.position = GetPostionFromGround(higher);
+            return true;
+        }
+        else
+        {
+            if (nowDist>0)
+            {
+                Move_Y(-speed);
+            }
+            else
+            {
+                Move_Y(speed);
+            }
+
+            return false;
+        }
+    }
+
     public bool MoveToHigher(float higher, float speed)
     {
         if (GetDistanceGround() >= higher)
@@ -77,7 +101,7 @@ public class EnemyController_fly : EnemyController
         {
             SetDirectionToTarget(targetPos,true);
             float dir = Mathf.Sign(-tr.localScale.x);
-            Move(speed * dir);
+            Move(-speed * dir);
 
             return false;
         }
@@ -112,6 +136,27 @@ public class EnemyController_fly : EnemyController
     {
         var targetT = myLayCast.GetLayTransform();
         return new Vector2(tr.position.x, ((Vector2)targetT).y + higher);
+    }
+
+    /// <summary>
+    /// プレーヤーのから指定距離距離をとるための位置を返す
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetPostionFromPl_NearMe(float dist)
+    {
+        Vector2 result = Vector2.zero;
+        var plPos = GetPlPosition();
+        if (plPos.x > tr.position.x)
+        {
+            result = plPos + new Vector2(-dist, 0);
+        }
+        else
+        {
+            result = plPos + new Vector2(dist, 0);
+        }
+        result.y = tr.position.y;
+        
+        return result;
     }
 
     public Vector2 GetPlPosition()
