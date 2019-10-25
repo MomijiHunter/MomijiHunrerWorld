@@ -42,6 +42,8 @@ public class EnemyMain_fly : EnemyMain
         aiUpdateOrg_attack.AddAction("fly_modify", () => AIUpdate_modifiHeight());
         aiUpdateOrg_detect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
         aiUpdateOrg_undetect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
+
+        aiUpdateOrg_mapChenge.AddAction("fly", () => AIUpdate_mapchengeFly());
     }
 
     virtual protected void AIUpdate_fly_unDetect()
@@ -62,6 +64,11 @@ public class EnemyMain_fly : EnemyMain
     /// 飛行状態の遷移処理
     /// </summary>
     virtual protected void AIUpdate_swichFly()
+    {
+
+    }
+
+    virtual protected void AIUpdate_mapchengeFly()
     {
 
     }

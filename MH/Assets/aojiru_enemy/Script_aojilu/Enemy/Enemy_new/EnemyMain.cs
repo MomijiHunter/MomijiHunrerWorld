@@ -31,6 +31,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     #region 
 
     List<AIActionOrganaizer> aiOrgList = new List<AIActionOrganaizer>();
+    protected AIActionOrganaizer aiUpdateOrg_mapChenge = new AIActionOrganaizer();
     protected AIActionOrganaizer aiUpdateOrg_undetect = new AIActionOrganaizer();
     protected AIActionOrganaizer aiUpdateOrg_attack = new AIActionOrganaizer();
     protected AIActionOrganaizer aiUpdateOrg_detect = new AIActionOrganaizer();
@@ -179,7 +180,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
         if (mapChengeCtrl!=null&&aiState == AISTATE.MAPCHENGE)//map変更AI時
         {
-            AIUpdate_mapChenge();
+            aiUpdateOrg_mapChenge.GetNowAction().Invoke();
+            //AIUpdate_mapChenge();
             return;
         }
 
@@ -235,8 +237,10 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         aiUpdateOrg_attack.SetNowAction("default");
         aiUpdateOrg_detect.AddAction("default", ()=>AIUpdate_detect());
         aiUpdateOrg_detect.SetNowAction("default");
-        aiUpdateOrg_undetect.AddAction("default",()=>AIUpdate_undetect());
+        aiUpdateOrg_undetect.AddAction("default", () => AIUpdate_undetect());
         aiUpdateOrg_undetect.SetNowAction("default");
+        aiUpdateOrg_mapChenge.AddAction("default", () => AIUpdate_mapChenge());
+        aiUpdateOrg_mapChenge.SetNowAction("default");
     }
 
     /// <summary>
