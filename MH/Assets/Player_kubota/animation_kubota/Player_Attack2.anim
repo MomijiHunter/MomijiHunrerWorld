@@ -7389,7 +7389,7 @@ AnimationClip:
     intParameter: 15
     messageOptions: 0
   - time: 1
-    functionName: ChargeStart
+    functionName: DisableAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
