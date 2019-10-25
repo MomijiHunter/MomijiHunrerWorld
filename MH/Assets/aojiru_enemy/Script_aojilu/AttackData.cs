@@ -6,20 +6,18 @@ public class AttackData : MonoBehaviour
 {
     [SerializeField] int attackPower;
     public int AttackPower { get { return attackPower; } }
-
-    /// <summary>
-    /// 吹っ飛ぶかどうか
-    /// </summary>
-    [SerializeField] bool isBlowAway=false;
-    public bool IsBlowAway { get { return isBlowAway; } }
+    
+    [SerializeField] int blowAwayLevel = 0;
+    public int BlowAwayLevel { get { return blowAwayLevel; } }
 
     public void SetAttackPower(int n)
     {
         attackPower = n;
     }
 
-    public void SetBlowAway(bool flag)
+    public void SetBlowAway(int level)
     {
-        isBlowAway = flag;
+        blowAwayLevel = level;
     }
+
 }
