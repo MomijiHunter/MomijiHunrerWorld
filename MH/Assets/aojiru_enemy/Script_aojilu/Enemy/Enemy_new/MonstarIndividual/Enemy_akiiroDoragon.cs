@@ -130,7 +130,6 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
             }
         }else if (rand < AddAIProbNum(aiStateFrontPl_fire))
         {
-
             if (EnemyCtrl_fly.IsPlayerFront())
             {
                 animator.SetTrigger("At_fire");
@@ -156,6 +155,27 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                 EndSwichFlyMode();
             }
         }
+    }
+
+    protected override void AIUpdate_mapChenge()
+    {
+        base.AIUpdate_mapChenge();
+        if (FlyMode)
+        {
+            aiUpdateOrg_mapChenge.SetNowAction("fly");
+        }
+        else
+        {
+            EnemyCtrl_fly.MoveToTarget_X(0.0f, mapChengeCtrl.GetNextLoadPosition(), EnemyCtrl_fly.MoveSpeed);
+
+        }
+    }
+
+    protected override void AIUpdate_mapchengeFly()
+    {
+        base.AIUpdate_mapchengeFly();
+        EnemyCtrl_fly.MoveToTarget_X(0.0f, mapChengeCtrl.GetNextLoadPosition(), EnemyCtrl_fly.MoveSpeed);
+
     }
     #region flyAI
     protected override void AIUpdate_fly_unDetect()
