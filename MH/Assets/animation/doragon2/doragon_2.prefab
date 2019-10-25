@@ -222,6 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPower: 1
+  isBlowAway: 0
 --- !u!70 &1695175042
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -524,6 +525,7 @@ MonoBehaviour:
   currentHP: 30
   stateLog: 0
   nonActive: 0
+  battleType: 0
   detectState: 1
   spriteBodyTr: {fileID: 0}
   footCollider: {fileID: 496956693}
@@ -797,7 +799,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8931630192971524373}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.54, y: 2.35, z: 0}
+  m_LocalPosition: {x: -7.52, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4574834742324233541}

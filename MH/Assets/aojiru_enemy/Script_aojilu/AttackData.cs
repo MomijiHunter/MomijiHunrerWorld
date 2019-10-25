@@ -10,15 +10,15 @@ public class AttackData : MonoBehaviour
     /// <summary>
     /// 吹っ飛ぶかどうか
     /// </summary>
-    [SerializeField] bool isBlowAway=false;
-    public bool IsBlowAway { get { return isBlowAway; } }
+    [SerializeField] int isBlowAway=0;
+    public int IsBlowAway { get { return isBlowAway; } }
 
     public void SetAttackPower(int n)
     {
         attackPower = n;
     }
 
-    public void SetBlowAway(bool flag)
+    public void SetBlowAway(int flag)
     {
         isBlowAway = flag;
     }

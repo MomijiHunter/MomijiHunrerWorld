@@ -19,7 +19,7 @@ namespace kubota
         [SerializeField] bool canChainCombo;
         public bool attacking = false;
         public bool canNotMove = false;
-        public bool superArmor = false;
+        public int superArmor = 0;
         public bool invincible = false;
 
         public bool hiding = false;
@@ -27,6 +27,9 @@ namespace kubota
         public bool dead = false;
 
         public int remainItems = 3;
+
+        public bool charging = false;
+        public int chargeLv = 0;
 
         List<UnityAction> actions = new List<UnityAction>();
         List<UnityAction> actions_Air = new List<UnityAction>();
@@ -167,6 +170,36 @@ namespace kubota
             canChainCombo = false;
         }
 
+        private void ChargeStart()
+        {
+            if (Input.GetButton("Submit"))
+            {
+                StartCoroutine(ChargeAttack());
+            }
+        }
+
+        private IEnumerator ChargeAttack()
+        {
+            anim.SetBool("Charge", true);
+            charging = true;
+            yield return new WaitUntil(() => Input.GetButtonUp("Submit"));
+            anim.SetTrigger("Attack");
+            anim.SetBool("Charge", false);
+            charging = false;
+            chargeLv = 0;
+
+        }
+
+        public void ActivateAttack(int power)
+        {
+            attack.attackPower = power;
+            attack.gameObject.SetActive(true);
+        }
+        public void DisableAttack()
+        {
+            attack.gameObject.SetActive(false);
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             GameObject col = collision.gameObject;
@@ -177,20 +210,20 @@ namespace kubota
             }
         }
 
-        public void DamageAction(int damage)
+        public void DamageAction(AttackData attack)
         {
             if (!invincible)
             {
-                if (damage >= 1)
+                if ((superArmor == 2 && attack.IsBlowAway == 1) || attack.IsBlowAway == 2)
                 {
                     StartCoroutine(BlowAway());
                 }
-                else if (!superArmor)
+                else if (superArmor==0)
                 {
                     anim.SetTrigger("DamageReaction");
                 }
                 anim.SetTrigger("Damage");
-                Damage(damage);
+                Damage(attack.AttackPower);
                 if (IsDead())
                 {
                     dead = true;
@@ -204,9 +237,10 @@ namespace kubota
 
         IEnumerator BlowAway()
         {
+            rb.velocity = Vector2.zero;
             canNotMove = true;
             attacking = true;
-            superArmor = true;
+            superArmor = 2;
             anim.SetTrigger("BlowAway");
             yield return new WaitForEndOfFrame();
             rb.velocity = new Vector2(transform.localScale.x * -30, 40);
