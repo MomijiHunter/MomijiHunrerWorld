@@ -18,7 +18,7 @@ namespace aojilu {
 
         AudioSource audioSource;
 
-        [SerializeField] EnemyBase[] targets;
+        [SerializeField] EnemyController[] targets;
 
         private void Awake()
         {
@@ -94,7 +94,7 @@ namespace aojilu {
             {
                 if (target == null) continue;
 
-                if (target.DetectState == EnemyBase.DETECTSTATE.DETECT)
+                if (target.DetectState == EnemyController.DETECTSTATE.DETECT)
                 {
                     result = true;
                     break;
