@@ -20,27 +20,26 @@ public class EnemyMain_antiFly : EnemyMain
         base.InitAIUpdateAction();
         aiUpdateOrg_attack.AddAction("antiFly", ()=>AIUpdate_antiFly_attack());
         aiUpdateOrg_detect.AddAction("antiFly", ()=>AIUpdate_antiFly_detect());
-
+        aiUpdateOrg_undetect.AddAction("antiFly", "default");
+        aiUpdateOrg_mapChenge.AddAction("antiFly", "default");
     }
-    protected override void AISelectDisturb_aiState()
+    protected override void AISelectDisturb_aiOrg()
     {
-        base.AISelectDisturb_aiState();
+        base.AISelectDisturb_aiOrg();
 
-        if (aiState != AISTATE.MAPCHENGE)
+        if (EnemyCtrl_antiFly.IsEnable_AntiAirCraft())
         {
-            if (EnemyCtrl_antiFly.IsEnable_AntiAirCraft())
-            {
-                aiUpdateOrg_attack.SetNowAction("antiFly");
-                aiUpdateOrg_detect.SetNowAction("antiFly");
-                isAntiArealMode = true;
-            }
-            else
-            {
-                aiUpdateOrg_attack.SetNowAction("default");
-                aiUpdateOrg_detect.SetNowAction("default");
-                isAntiArealMode = false;
-            }
+            aiUpdateOrg_attack.SetNowAction("antiFly");
+            aiUpdateOrg_detect.SetNowAction("antiFly");
+            isAntiArealMode = true;
         }
+        else
+        {
+            aiUpdateOrg_attack.SetNowAction("default");
+            aiUpdateOrg_detect.SetNowAction("default");
+            isAntiArealMode = false;
+        }
+
     }
     
 

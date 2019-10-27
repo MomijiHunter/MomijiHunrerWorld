@@ -6,17 +6,27 @@ using aojilu;
 public class EffectMaker_fire : EffectMaker
 {
     [SerializeField] animationUtil fire;
+    [SerializeField] animationUtil fireBig;
     [SerializeField] Fire_sorairo_bunretu fireBunretu;
     [SerializeField] Vector2 fireVector;
     [SerializeField] float fireLength;
 
-    public void FireCreate()
+    void ShotCreat(animationUtil target)
     {
-        animationUtil obj = Instantiate(fire, effectPosition.position, Quaternion.identity);
+        animationUtil obj = Instantiate(target, effectPosition.position, Quaternion.identity);
         var vec = fireVector;
         vec.x *= Mathf.Sign(-transform.localScale.x);
         obj.SetVelocity(vec);
         obj.SetDedLength(fireLength);
+    }
+
+    public void FireCreate()
+    {
+        ShotCreat(fire);
+    }
+    public void FireCreate_big()
+    {
+        ShotCreat(fireBig);
     }
 
 

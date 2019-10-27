@@ -165,4 +165,10 @@ public class EnemyController_fly : EnemyController
     }
     #endregion
     #endregion
+
+    protected override void DeadAction()
+    {
+        base.DeadAction();
+        GravityOn();
+    }
 }

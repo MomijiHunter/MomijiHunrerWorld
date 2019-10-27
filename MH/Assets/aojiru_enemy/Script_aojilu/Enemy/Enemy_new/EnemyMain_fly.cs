@@ -22,6 +22,13 @@ public class EnemyMain_fly : EnemyMain
     bool swichFlyMode = false;
    [SerializeField] bool heightModify = false;
 
+    int nowModeActionCount;
+    [SerializeField] int chengeModeLength;
+    /// <summary>
+    /// 飛行状態の切り替え時に使う
+    /// </summary>
+    protected float ChengeModeRate { get {return (float) nowModeActionCount / chengeModeLength; } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -34,18 +41,13 @@ public class EnemyMain_fly : EnemyMain
         aiUpdateOrg_attack.AddAction("fly", () => AIUpdate_fly_attack());
         aiUpdateOrg_detect.AddAction("fly", () => AIUpdate_fly_detect());
         aiUpdateOrg_undetect.AddAction("fly", () => AIUpdate_fly_unDetect());
-
-        aiUpdateOrg_attack.AddAction("fly_swich", () => AIUpdate_swichFly());
-        aiUpdateOrg_detect.AddAction("fly_swich", () => AIUpdate_swichFly());
-        aiUpdateOrg_undetect.AddAction("fly_swich", () => AIUpdate_swichFly());
-
-        aiUpdateOrg_attack.AddAction("fly_modify", () => AIUpdate_modifiHeight());
-        aiUpdateOrg_detect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
-        aiUpdateOrg_undetect.AddAction("fly_modify", () => AIUpdate_modifiHeight());
-
         aiUpdateOrg_mapChenge.AddAction("fly", () => AIUpdate_mapchengeFly());
+        
+        AIOrgAddAction("fly_swich", () => AIUpdate_swichFly());
+        
+        AIOrgAddAction("fly_modify", () => AIUpdate_modifiHeight());
     }
-
+    #region 追加のAI関数
     virtual protected void AIUpdate_fly_unDetect()
     {
 
@@ -81,37 +83,33 @@ public class EnemyMain_fly : EnemyMain
             heightModify = false;
         }
     }
-
-    protected override void AISelectDisturb_aiState()
+    #endregion
+    protected override void AISelectDisturb_aiOrg()
     {
-        base.AISelectDisturb_aiState();
+        base.AISelectDisturb_aiOrg();
 
-        if (Mathf.Abs( EnemyCtrl_fly.GetDistanceGround()- flyHight) > 1.0f)
+        if (Mathf.Abs(EnemyCtrl_fly.GetDistanceGround() - flyHight) > 1.0f)
         {
             heightModify = true;
         }
-
-        if (aiState != AISTATE.MAPCHENGE)
+        if (swichFlyMode)//飛行遷移処理
         {
-            if (swichFlyMode)//飛行遷移処理
+            AIOrgSetNowAction("fly_swich");
+        }
+        else if (flyMode)//飛行処理
+        {
+            if (heightModify)
             {
-                AIOrgSetNowAction("fly_swich");
+                AIOrgSetNowAction("fly_modify");
             }
-            else if (flyMode)//飛行処理
+            else
             {
-                if (heightModify)
-                {
-                    AIOrgSetNowAction("fly_modify");
-                }
-                else
-                {
-                    AIOrgSetNowAction("fly");
-                }
+                AIOrgSetNowAction("fly");
             }
-            else//地上処理
-            {
-                AIOrgSetNowAction("default");
-            }
+        }
+        else//地上処理
+        {
+            AIOrgSetNowAction("default");
         }
     }
 
@@ -140,8 +138,10 @@ public class EnemyMain_fly : EnemyMain
     void StartSwichFlyMode()
     {
         swichFlyMode = true;
-        SetAIState(AISTATE.AISELECT, 3.0f);//swichFlyのAI関数に入るための処理
+        SetAIState(AISTATE.WAIT, 3.0f);//swichFlyのAI関数に入るための処理
+        AISelectDisturb_aiOrg();
         EnemyCtrl_fly.StopMove();
+        nowModeActionCount = 0;
         if (flyMode)//上昇時は最初にanimationを呼ぶ
         {
             StartFlyAnimation();
@@ -203,6 +203,11 @@ public class EnemyMain_fly : EnemyMain
             EnemyCtrl_fly.GravityOn();
         }
     }
-    
+
+    public override void EndAttack()
+    {
+        base.EndAttack();
+        nowModeActionCount++;
+    }
     #endregion
 }

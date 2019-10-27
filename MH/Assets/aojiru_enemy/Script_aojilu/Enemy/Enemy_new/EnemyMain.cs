@@ -66,12 +66,12 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     {
         if (EnemyCtrl.IsDeadSelf()) return;
         if (fixedSpeed != null) EnemyCtrl.Move_force((float)fixedSpeed);
-        PreAIAction();
         AIUpdte();
         DetectUpdate();
     }
     #endregion
     #region AIタイミング関数
+    #region preAI
     /// <summary>
     /// AI選択の前に行うアクション
     /// </summary>
@@ -81,29 +81,6 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         PreAIAction_aiState();
     }
 
-    /// <summary>
-    /// AISelectの時に別の処理を加える
-    /// </summary>
-    void AISelectDisturb()
-    {
-        AISelectDisturb_detect();
-        AISelectDisturb_aiState();
-    }
-    #endregion
-    #region detect
-    void DetectUpdate()
-    {
-        switch (detectState)
-        {
-            case EnemyController.DETECTSTATE.UNDETECT:
-                break;
-            case EnemyController.DETECTSTATE.PREDETECT:
-                break;
-            case EnemyController.DETECTSTATE.DETECT:
-                EnemyCtrl.PredetectUpdate();
-                break;
-        }
-    }
 
     void PreAIAction_detect()
     {
@@ -127,6 +104,23 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
                 break;
         }
     }
+
+    void PreAIAction_aiState()
+    {
+        ResetAiProbNum();
+    }
+    #endregion
+    #region disturb
+    /// <summary>
+    /// AISelectの時に別の処理を加える
+    /// </summary>
+    void AISelectDisturb()
+    {
+        AISelectDisturb_detect();
+        AISelectDisturb_aiOrg();
+        AISelectDisturb_aiState_mapChenge();
+    }
+
 
     /// <summary>
     /// AISELECTになった時に呼ばれる関数
@@ -153,6 +147,44 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         }
     }
 
+
+    /// <summary>
+    /// AIStateがAISELECTになった時に呼ばれる関数
+    /// aiOrgの遷移処理を記述
+    /// </summary>
+    virtual protected void AISelectDisturb_aiOrg()
+    {
+
+    }
+
+    /// <summary>
+    /// マップ変更状態への遷移処理
+    /// </summary>
+    void AISelectDisturb_aiState_mapChenge()
+    {
+        if (mapChengeCtrl != null && mapChengeCtrl.MapChengeEnable)
+        {
+            SetAIState(AISTATE.MAPCHENGE, 60.0f);
+        }
+    }
+    #endregion
+    #endregion
+    #region detect
+    void DetectUpdate()
+    {
+        switch (detectState)
+        {
+            case EnemyController.DETECTSTATE.UNDETECT:
+                break;
+            case EnemyController.DETECTSTATE.PREDETECT:
+                break;
+            case EnemyController.DETECTSTATE.DETECT:
+                EnemyCtrl.PredetectUpdate();
+                break;
+        }
+    }
+
+
     /// <summary>
     /// OnReciveDamageで呼ばれる
     /// </summary>
@@ -170,6 +202,8 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
 
     void AIUpdte()
     {
+        PreAIAction();
+
         if (StopAIAction) return;
 
         if (Time.fixedTime > aiStartTime + aiWaitLength)//呼び出し時の時間をオーバーした場合はAISelectに戻る
@@ -181,7 +215,6 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         if (mapChengeCtrl!=null&&aiState == AISTATE.MAPCHENGE)//map変更AI時
         {
             aiUpdateOrg_mapChenge.GetNowAction().Invoke();
-            //AIUpdate_mapChenge();
             return;
         }
 
@@ -197,17 +230,16 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
                 {
                     if (attackNow) return;
                     aiUpdateOrg_attack.GetNowAction().Invoke();
-                    //AIUpdate_attack();
                 }
                 else
                 {
-                    //AIUpdate_detect();//非攻撃時、発見状態
+                    //非攻撃時、発見状態
                     aiUpdateOrg_detect.GetNowAction().Invoke();
                 }
                 break;
         }
     }
-
+    #region AIUpdate
     protected virtual void AIUpdate_undetect()
     {
 
@@ -226,12 +258,13 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     protected virtual void AIUpdate_mapChenge()
     {
     }
-
+    #endregion
     protected virtual void InitAIUpdateAction()
     {
         aiOrgList.Add(aiUpdateOrg_attack);
         aiOrgList.Add(aiUpdateOrg_undetect);
         aiOrgList.Add(aiUpdateOrg_detect);
+        aiOrgList.Add(aiUpdateOrg_mapChenge);
 
         aiUpdateOrg_attack.AddAction("default", ()=>AIUpdate_attack());
         aiUpdateOrg_attack.SetNowAction("default");
@@ -241,6 +274,18 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         aiUpdateOrg_undetect.SetNowAction("default");
         aiUpdateOrg_mapChenge.AddAction("default", () => AIUpdate_mapChenge());
         aiUpdateOrg_mapChenge.SetNowAction("default");
+    }
+
+    /// <summary>
+    /// AIOrgの一括登録
+    /// 単一処理のみ登録可
+    /// </summary>
+    protected void AIOrgAddAction(string key,UnityAction ua)
+    {
+        foreach(var act in aiOrgList)
+        {
+            act.AddAction(key,ua);
+        }
     }
 
     /// <summary>
@@ -292,23 +337,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
         aiWaitLength = t;
     }
 
-    /// <summary>
-    /// AIStateがAISELECTになった時に呼ばれる関数
-    /// aiStateの処理をしている
-    /// </summary>
-    virtual protected void AISelectDisturb_aiState()
-    {
-        if (aiState != AISTATE.AISELECT) return;
-        if (mapChengeCtrl != null && mapChengeCtrl.MapChengeEnable)
-        {
-            SetAIState(AISTATE.MAPCHENGE, 60.0f);
-        }
-    }
 
-    void PreAIAction_aiState()
-    {
-        ResetAiProbNum();
-    }
     /// <summary>
     /// 確率の値を追加し、追加後の値を返す
     /// </summary>
@@ -346,7 +375,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     /// <summary>
     /// 攻撃終了
     /// </summary>
-    public void EndAttack()
+    public virtual void EndAttack()
     {
         attackNow = false;
         animator.SetBool("attackEnd", true);
@@ -379,7 +408,7 @@ public class EnemyMain : MonoBehaviour,ReciveInterFace_damage,ReciveInterFace_ma
     }
     #endregion
     #region 乱数関連
-    protected float GetAIRandaomNumver()
+    protected float GetAIRandomNumver()
     {
         float result = 0.0f;
         if (randomFixedNumber == null)
