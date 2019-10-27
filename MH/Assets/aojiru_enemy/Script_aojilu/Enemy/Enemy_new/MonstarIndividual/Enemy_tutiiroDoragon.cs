@@ -30,7 +30,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
     protected override void AIUpdate_undetect()
     {
         base.AIUpdate_undetect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
@@ -45,7 +45,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
             case AISTATE.APPROACH_WALK:
                 if (!IsFixedRandomNumber)
                 {
-                    SetRandFiexed(GetAIRandaomNumver());
+                    SetRandFiexed(GetAIRandomNumver());
                     nowTarget = transform.position + new Vector3((RandomFixedNumber>50)?20:-20,0);
                 }
                 if (EnemyCtrl.MoveToTarget_X(1.0f, nowTarget, EnemyCtrl.MoveSpeed * 0.5f))
@@ -63,7 +63,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
     protected override void AIUpdate_detect()
     {
         base.AIUpdate_detect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
@@ -105,7 +105,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
     protected override void AIUpdate_attack()
     {
         base.AIUpdate_attack();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         if (rand < aiStateFrontPl_dash)
         {
             EnemyCtrl.SetDirectionToPl();

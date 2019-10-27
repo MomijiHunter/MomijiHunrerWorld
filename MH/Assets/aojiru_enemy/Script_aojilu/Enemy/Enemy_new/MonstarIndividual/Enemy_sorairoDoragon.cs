@@ -36,7 +36,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
     protected override void AIUpdate_undetect()
     {
         base.AIUpdate_undetect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
 
         switch (aiState)
         {
@@ -50,7 +50,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
             case AISTATE.APPROACH_WALK:
                 if (nowTargetPos == null)
                 {
-                    rand = GetAIRandaomNumver();
+                    rand = GetAIRandomNumver();
                     nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                 }
                 if (EnemyCtrl_antiFly.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
@@ -69,7 +69,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
     protected override void AIUpdate_detect()
     {
         base.AIUpdate_detect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
@@ -104,7 +104,7 @@ public class Enemy_sorairoDoragon : EnemyMain_antiFly
     protected override void AIUpdate_attack()
     {
         base.AIUpdate_attack();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         if (rand < AddAIProbNum(aiStateFrontPl_dash))
         {
             EnemyCtrl_antiFly.SetDirectionToPl();
