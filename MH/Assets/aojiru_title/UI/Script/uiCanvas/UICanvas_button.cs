@@ -9,6 +9,7 @@ public class UICanvas_button : UICanvas
     [SerializeField] bool inverseY;
     [SerializeField] List<int> indexRangeList;
     protected List<int> indexRangeList_use;
+    [SerializeField] Transform buttonParent;//selectButtonの親をしているTｒ
     [SerializeField] List<UI_selectComponentBase> selectList_inspector;
     List<List<UI_selectComponentBase>> selectList_use = new List<List<UI_selectComponentBase>>();
 
@@ -22,6 +23,7 @@ public class UICanvas_button : UICanvas
     protected override void Start()
     {
         base.Start();
+        if (buttonParent == null) buttonParent = transform;
         SetIndexRangeList();
         SetSelectComponentList_inspector();
         SetSelectComponentList();
@@ -70,9 +72,9 @@ public class UICanvas_button : UICanvas
     {
         if (selectList_inspector.Count > 0) return;
         selectList_inspector = new List<UI_selectComponentBase>();
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < buttonParent.childCount; i++)
         {
-            var data = transform.GetChild(i).GetComponent<UI_selectComponentBase>();
+            var data = buttonParent.GetChild(i).GetComponent<UI_selectComponentBase>();
             if (data == null) continue;
             selectList_inspector.Add(data);
         }
