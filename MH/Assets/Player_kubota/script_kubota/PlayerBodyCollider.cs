@@ -15,7 +15,7 @@ namespace kubota
 
             if (col.tag == "EnemyAttack")
             {
-                player.DamageAction(col.GetComponent<AttackData>().AttackPower);
+                player.DamageAction(col.GetComponent<AttackData>());
             }
         }
     }
