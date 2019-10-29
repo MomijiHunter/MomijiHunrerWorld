@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Cinemachine;
 
 namespace aojilu {
     public class LoadObject : MonoBehaviour
@@ -17,9 +18,12 @@ namespace aojilu {
         public MapParent MyMap { get { return myMap; } }
         public string MyMapName { get { return myMap.name; } }
 
+        CinemachineVirtualCamera playerCamera;
+
         private void Awake()
         {
             load = GameObject.FindGameObjectWithTag("LoadPanel").GetComponent<LoadCtrl>();
+            playerCamera = GameObject.Find("PlayerCamera").GetComponent<CinemachineVirtualCamera>();
         }
 
 
@@ -31,6 +35,7 @@ namespace aojilu {
                 var plTr = col.transform;
                 load.AddBlackAction("Load", () => ChengeToTarget(plTr));
                 load.FadeAction();
+                StartCoroutine(SetPlayerCamera());
             }
         }
 
@@ -51,6 +56,15 @@ namespace aojilu {
         void ChengeToTarget(Transform tr)
         {
             tr.position = chengeTarget.frontTr.position;
+        }
+
+        private IEnumerator SetPlayerCamera()
+        {
+            playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
+            playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
+            yield return new WaitForSeconds(0.2f);
+            playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+            playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3.3f;
         }
 
         /*LoadObject RandomObj()

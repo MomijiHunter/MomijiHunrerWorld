@@ -214,7 +214,7 @@ namespace kubota
         {
             if (!invincible)
             {
-                if ((superArmor == 2 && attack.IsBlowAway == 1) || attack.IsBlowAway == 2)
+                if ((superArmor == 2 && attack.BlowAwayLevel == 1) || attack.BlowAwayLevel == 2)
                 {
                     StartCoroutine(BlowAway());
                 }

@@ -1376,7 +1376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPower: 1
-  isBlowAway: 0
+  blowAwayLevel: 0
 --- !u!70 &5042119498380063394
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2182,7 +2182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8828224110624761445
 Transform:
   m_ObjectHideFlags: 0
