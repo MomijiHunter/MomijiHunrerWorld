@@ -22,6 +22,7 @@ public class UICanvas : MonoBehaviour
 
     Canvas myCanvas;
     Animator animator;
+    LoadCtrl loadCtrl;
     protected UIListController uictrl { get; private set; }
 
     float beforeInputTime;
@@ -31,6 +32,8 @@ public class UICanvas : MonoBehaviour
 
     //入力可能かどうか
     [SerializeField]bool inputEnable;
+
+
 
     #region 入力時に追加で呼ばれる関数　畳みたい
     [SerializeField] UnityEvent inputAction_submit;
@@ -50,6 +53,7 @@ public class UICanvas : MonoBehaviour
     {
         myCanvas = GetComponent<Canvas>();
         animator = GetComponent<Animator>();
+        loadCtrl = FindObjectOfType<LoadCtrl>();
         InitChengeUIStateAction();
     }
 
@@ -60,7 +64,7 @@ public class UICanvas : MonoBehaviour
 
     virtual protected void Update()
     {
-        if (inputEnable)
+        if (inputEnable&&!loadCtrl.IsFadeNow)
         {
             InputUpdate();
         }
