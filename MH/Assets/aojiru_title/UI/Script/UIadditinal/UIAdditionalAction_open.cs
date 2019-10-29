@@ -6,6 +6,16 @@ public class UIAdditionalAction_open : UIAdditionalActon_base
 {
     [SerializeField] int targetIndex;
 
+    public void SelfClose()
+    {
+        uiCtrl.CloseUICanvas(myCanvas.MyUIIndex);
+    }
+
+    public void SelfSleep()
+    {
+        uiCtrl.SleepUICanvas(myCanvas.MyUIIndex);
+    }
+
     public void OpenTarget_selfClose(int i)
     {
         uiCtrl.OpenUICanvas(i, myCanvas.SortOrder);

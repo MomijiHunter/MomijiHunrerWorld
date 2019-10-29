@@ -190,7 +190,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
                     FlyMode_end();
                 }
                 else if (rand < AddAIProbNum(aiStateFly_approch)) SetAIState(AISTATE.APPROACH_DASH, 5.0f);
-                else if (rand < AddAIProbNum(aiStateFly_escape)) SetAIState(AISTATE.ESCAPE_DASH, 2.0f);
+                else if (rand < AddAIProbNum(aiStateFly_escape)) SetAIState(AISTATE.ESCAPE_DASH, 3.0f);
                 else if (rand < AddAIProbNum(aiStateFly_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
                  
                 break;

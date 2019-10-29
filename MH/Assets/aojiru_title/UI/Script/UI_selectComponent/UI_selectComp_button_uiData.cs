@@ -14,6 +14,11 @@ public class UI_selectComp_button_uiData : UI_selectComp_text_image
 {
     [SerializeField] UI_buttonData_nextUIData myData;
 
+    protected override void AddAdditionalEvent()
+    {
+        base.AddAdditionalEvent();
+        AdditionalAction.AddListener(()=>uiCtrl.OpenUICanvas(myData.TargetUIIndex, myCanbus.SortOrder));
+    }
 
     public override T GetData<T>()
     {

@@ -17,6 +17,11 @@ public class LoadCtrl : MonoBehaviour
 
     Dictionary<string,UnityAction>  blackActionList=new Dictionary<string, UnityAction>();
 
+    //黒画面で止まる時間
+    [SerializeField] float waitTime;
+
+    public bool IsFadeNow { get { return fadeState != FadeState.CLEAR; } }
+
     private void Update()
     {
         switch (fadeState)
@@ -37,7 +42,7 @@ public class LoadCtrl : MonoBehaviour
                 break;
             case FadeState.BLACK:
                 BlackAction();
-                fadeState = FadeState.UP;
+                WaitTimeAction(waitTime, () =>fadeState = FadeState.UP);
                 break;
             case FadeState.UP:
                 {
@@ -75,12 +80,33 @@ public class LoadCtrl : MonoBehaviour
         if (ua != null) return;
         blackActionList.Add(key, action);
     }
-
+    
+    [ContextMenu("fadeTest")]
     public void FadeAction()
     {
         if (fadeState == FadeState.CLEAR)
         {
             fadeState = FadeState.DOWN;
         }
+    }
+
+    /// <summary>
+    /// 黒画面で止まる時間の指定
+    /// </summary>
+    /// <param name="f"></param>
+    public void SetWaitBlackTime(float f)
+    {
+        waitTime = f;
+    }
+
+    void WaitTimeAction(float f, UnityAction ua)
+    {
+        StartCoroutine(WaitTimeCoroutine(f, ua));
+    }
+
+    IEnumerator WaitTimeCoroutine(float f,UnityAction ua)
+    {
+        yield return new WaitForSeconds(f);
+        ua.Invoke();
     }
 }
