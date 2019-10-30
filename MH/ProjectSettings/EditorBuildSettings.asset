@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Zako10.unity
     guid: f00641c4a4deedf4aad87b1283cce699
+  - enabled: 1
+    path: Assets/Scenes/Boss3.unity
+    guid: d0a1d765b2ac4aa4599dbd460a19a030
+  - enabled: 1
+    path: Assets/Scenes/Boss4.unity
+    guid: 63334f82480628b478b7495e88edc061
   m_configObjects: {}
