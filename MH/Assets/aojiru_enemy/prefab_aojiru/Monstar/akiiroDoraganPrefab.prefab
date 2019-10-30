@@ -1914,7 +1914,7 @@ MonoBehaviour:
   - Ground
   mask:
     serializedVersion: 2
-    m_Bits: 16
+    m_Bits: 4112
 --- !u!82 &1814425886
 AudioSource:
   m_ObjectHideFlags: 0
