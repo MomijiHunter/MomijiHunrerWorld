@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UI_buttonDataBase
 {
@@ -19,12 +20,19 @@ public abstract class  UI_selectComponentBase : MonoBehaviour
     public bool Sleep { get { return sleep; } protected set { sleep = value; } }
 
     protected UICanvas myCanbus { get; private set; }
+    protected UIListController uiCtrl { get; private set; }
 
     public bool selected { get; private set; }
+
+    //追加の処理　選択されたときに呼ばれる
+    [SerializeField] UnityEvent additionalAction;
+    public UnityEvent AdditionalAction { get { return additionalAction; } }
 
     virtual protected void Start()
     {
         myCanbus = GetComponentInParent<UICanvas>();
+        uiCtrl = GetComponentInParent<UIListController>();
+        AddAdditionalEvent();
     }
 
     virtual protected void Update()
@@ -64,6 +72,14 @@ public abstract class  UI_selectComponentBase : MonoBehaviour
     }
 
     protected virtual void SleepEndAction()
+    {
+
+    }
+
+    /// <summary>
+    /// additionalEventの追加
+    /// </summary>
+    protected virtual void AddAdditionalEvent()
     {
 
     }

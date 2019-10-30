@@ -29,6 +29,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
 
     [SerializeField, Space(10)] float aiStateFlyAt_dive;
     [SerializeField] float aiStateFlyAt_fire;
+    
 
     #endregion
     #region AI
@@ -36,7 +37,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_undetect()
     {
         base.AIUpdate_undetect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
@@ -49,7 +50,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
             case AISTATE.APPROACH_WALK:
                 if (nowTargetPos == null)
                 {
-                    rand = GetAIRandaomNumver();
+                    rand = GetAIRandomNumver();
                     nowTargetPos = (Vector2)transform.position + new Vector2((rand > 50) ? 20 : -20, 0);
                 }
                 if (EnemyCtrl_fly.MoveToTarget_X(3.0f, (Vector2)nowTargetPos, moveSpeed))
@@ -68,17 +69,17 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_detect()
     {
         base.AIUpdate_detect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
-                if (rand < AddAIProbNum(aiStateNum_walk)) SetAIState(AISTATE.APPROACH_WALK, 4.0f);
-                else if (rand < AddAIProbNum(aiStateNum_dash)) SetAIState(AISTATE.APPROACH_DASH, 4.0f);
-                else if (rand < AddAIProbNum(aiStateNum_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
-                else if (rand < AddAIProbNum(aiStateNum_fly))
+                if (rand < AddAIProbNum(aiStateNum_fly * ChengeModeRate))
                 {
                     FlyMode_start();
                 }
+                else if (rand < AddAIProbNum(aiStateNum_walk)) SetAIState(AISTATE.APPROACH_WALK, 4.0f);
+                else if (rand < AddAIProbNum(aiStateNum_dash)) SetAIState(AISTATE.APPROACH_DASH, 4.0f);
+                else if (rand < AddAIProbNum(aiStateNum_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
                 else if(rand<100)
                 {
                     SetAIState(AISTATE.WAIT, 4.0f);
@@ -107,7 +108,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_attack()
     {
         base.AIUpdate_attack();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         if (rand < AddAIProbNum(aiStateFrontPl_dash))
         {
             EnemyCtrl_fly.SetDirectionToPl();
@@ -143,7 +144,8 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
         base.AIUpdate_swichFly();
         if (FlyMode)
         {
-            if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
+            //if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
+            if(EnemyCtrl_fly.MoveToTarget_Y(FlyHight,MoveSpeedY))
             {
                 EndSwichFlyMode();
             }
@@ -160,15 +162,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_mapChenge()
     {
         base.AIUpdate_mapChenge();
-        if (FlyMode)
-        {
-            aiUpdateOrg_mapChenge.SetNowAction("fly");
-        }
-        else
-        {
-            EnemyCtrl_fly.MoveToTarget_X(0.0f, mapChengeCtrl.GetNextLoadPosition(), EnemyCtrl_fly.MoveSpeed);
-
-        }
+        FlyMode_start();
     }
 
     protected override void AIUpdate_mapchengeFly()
@@ -187,26 +181,18 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_fly_detect()
     {
         base.AIUpdate_fly_detect();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         switch (aiState)
         {
             case AISTATE.AISELECT:
-                if (EnemyCtrl_fly.GetDistanceGround() < FlyHight)
-                {
-                    if (EnemyCtrl_fly.MoveToHigher(FlyHight, MoveSpeedY))
-                    {
-                        EnemyCtrl_fly.StopMove_Y();
-                        EnemyCtrl_fly.StopMove();
-                    }
-                    else return;
-                }
-                else if (rand < AddAIProbNum(aiStateFly_approch)) SetAIState(AISTATE.APPROACH_DASH, 5.0f);
-                else if (rand < AddAIProbNum(aiStateFly_escape)) SetAIState(AISTATE.ESCAPE_DASH, 2.0f);
-                else if (rand < AddAIProbNum(aiStateFly_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
-                else if (rand < AddAIProbNum(aiStateFly_flyEnd))
+                if (rand < AddAIProbNum(aiStateFly_flyEnd * ChengeModeRate))
                 {
                     FlyMode_end();
                 }
+                else if (rand < AddAIProbNum(aiStateFly_approch)) SetAIState(AISTATE.APPROACH_DASH, 5.0f);
+                else if (rand < AddAIProbNum(aiStateFly_escape)) SetAIState(AISTATE.ESCAPE_DASH, 3.0f);
+                else if (rand < AddAIProbNum(aiStateFly_attack)) SetAIState(AISTATE.ATTACK, 20.0f);
+                 
                 break;
             case AISTATE.APPROACH_DASH:
                 if (EnemyCtrl_fly.MoveToPlayer_X(10.0f, moveSpeed))
@@ -217,7 +203,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
             case AISTATE.ESCAPE_DASH:
                 if (nowTargetPos == null)
                 {
-                    if (EnemyCtrl_fly.GetDistancePlayer_X() > 40.0f)
+                    if (EnemyCtrl_fly.GetDistancePlayer_X()> 40.0f)
                     {
                         SetAIState(AISTATE.APPROACH_DASH,5.0f);
                         return;
@@ -239,7 +225,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
     protected override void AIUpdate_fly_attack()
     {
         base.AIUpdate_fly_attack();
-        float rand = GetAIRandaomNumver();
+        float rand = GetAIRandomNumver();
         if (rand < AddAIProbNum(aiStateFlyAt_dive))
         {
             EnemyCtrl_fly.SetDirectionToPl();
@@ -247,7 +233,7 @@ public class Enemy_akiiroDoragon : EnemyMain_fly
             StartAttack();
         }else if (rand < AddAIProbNum(aiStateFlyAt_fire))
         {
-
+            if (EnemyCtrl_fly.GetDistancePlayer_X() < 10.0f) return;
             EnemyCtrl_fly.SetDirectionToPl();
             animator.SetTrigger("At_fire_sky");
             StartAttack();
