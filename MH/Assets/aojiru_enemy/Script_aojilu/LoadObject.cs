@@ -62,7 +62,7 @@ namespace aojilu {
         {
             playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
             playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
             playerCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 3.3f;
         }
