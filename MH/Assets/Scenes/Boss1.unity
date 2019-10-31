@@ -187,6 +187,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
+      propertyPath: MaxHP
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
+      propertyPath: currentHP
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 4837123430888135026, guid: 364446e69a3e5d045b0c3010418bf8af,
         type: 3}
       propertyPath: nowMapParent
@@ -1436,36 +1444,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerAll
       objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: lifebar
-      value: 
-      objectReference: {fileID: 1503162107}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: invincible
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: canNotMove
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: attacking
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: charging
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: superArmor
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3094438344999436978, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1521,9 +1499,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3094438344999436976, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
         type: 3}
-      propertyPath: m_ApplyRootMotion
+      propertyPath: lifebar
+      value: 
+      objectReference: {fileID: 1503162107}
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: invincible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: canNotMove
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: attacking
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: charging
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3094438344999436977, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: superArmor
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5564221341010801734, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
@@ -1866,6 +1869,31 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.000000021366068
       objectReference: {fileID: 0}
+    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.9370976
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.34906757
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 139.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.79055804
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.047466267
+      objectReference: {fileID: 0}
     - target: {fileID: 5533977990552652552, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -1970,31 +1998,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.9370976
-      objectReference: {fileID: 0}
-    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.34906757
-      objectReference: {fileID: 0}
-    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 139.139
-      objectReference: {fileID: 0}
-    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.79055804
-      objectReference: {fileID: 0}
-    - target: {fileID: 3523312882238920366, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.047466267
       objectReference: {fileID: 0}
     - target: {fileID: 7658149655186804532, guid: ac7c8ccf44e2b8e438bc30dc01d286d0,
         type: 3}

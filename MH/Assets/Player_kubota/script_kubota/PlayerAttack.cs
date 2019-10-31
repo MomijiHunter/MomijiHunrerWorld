@@ -7,6 +7,7 @@ namespace kubota
     public class PlayerAttack : MonoBehaviour
     {
         public int attackPower;
+        [SerializeField] Player player;
 
         //攻撃が当たった敵のリスト
         public List<GameObject> attackedEnemy = new List<GameObject>();
@@ -17,6 +18,7 @@ namespace kubota
             {
                 if (attackedEnemy.Contains(collision.gameObject))
                     attackedEnemy.Add(collision.gameObject);
+                player.DisableAttack();
             }
         }
     }
