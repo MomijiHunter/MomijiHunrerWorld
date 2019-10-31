@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPower: 4
+  player: {fileID: 3094438344999436977}
   attackedEnemy: []
 --- !u!58 &486807396788426404
 CircleCollider2D:
@@ -5158,7 +5159,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 3f06fab329370274f963d094e6836434, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
