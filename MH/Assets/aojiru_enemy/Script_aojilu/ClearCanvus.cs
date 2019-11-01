@@ -13,6 +13,7 @@ namespace aojilu
             NONE,CLEAR,GAMEOVER,ToTitle
         }
         [SerializeField]ClearState clearState = ClearState.NONE;
+        public ClearState clear { get { return clearState; } }
 
         [SerializeField] float clearWaitTime;
         [SerializeField] float overWaitTime;

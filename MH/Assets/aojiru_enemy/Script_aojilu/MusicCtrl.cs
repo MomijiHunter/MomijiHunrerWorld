@@ -5,6 +5,10 @@ using UnityEngine;
 namespace aojilu {
     public class MusicCtrl : MonoBehaviour
     {
+        bool end = false;
+        bool clear = false;
+        bool dead = false;
+
         public enum FadeState
         {
             NONE, DOWN, UP
@@ -17,13 +21,16 @@ namespace aojilu {
         float firstVolume;
 
         AudioSource audioSource;
+        [SerializeField]AudioSource loop;
 
         [SerializeField] EnemyController[] targets;
+        ClearCanvus cl;
 
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
             firstVolume = audioSource.volume;
+            cl = FindObjectOfType<ClearCanvus>();
         }
 
         private void Update()
@@ -63,7 +70,20 @@ namespace aojilu {
             audioSource.clip = null;
             audioSource.Stop();
             audioSource.clip = ac;
-            audioSource.Play();
+            if (clear)
+            {
+                audioSource.loop = false;
+                audioSource.PlayScheduled(AudioSettings.dspTime);
+                loop.PlayScheduled(AudioSettings.dspTime + ((float)audioSource.clip.samples / (float)audioSource.clip.frequency));
+
+            }
+            else
+            {
+
+                audioSource.Play();
+                if (dead) audioSource.loop = false;
+            }
+
         }
 
         public void ChengeMusic(int i)
@@ -74,7 +94,21 @@ namespace aojilu {
 
         void Test_ChengeMusic()
         {
-            if (Test_checkDetectTarget())
+            if (end) return;
+            if (cl.clear == ClearCanvus.ClearState.CLEAR)
+            {
+                ChengeMusic(3);
+                end = true;
+                clear = true;
+            }
+            else if(cl.clear==ClearCanvus.ClearState.GAMEOVER)
+            {
+
+                ChengeMusic(2);
+                end = true;
+                dead = true;
+            }
+            else if (Test_checkDetectTarget())
             {
                 ChengeMusic(1);
             }else 
