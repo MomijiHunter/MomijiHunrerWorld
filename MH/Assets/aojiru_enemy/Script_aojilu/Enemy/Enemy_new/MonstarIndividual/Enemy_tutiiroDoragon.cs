@@ -63,6 +63,7 @@ public class Enemy_tutiiroDoragon : EnemyMain
     protected override void AIUpdate_detect()
     {
         base.AIUpdate_detect();
+        ResetRandFiexed();
         float rand = GetAIRandomNumver();
         switch (aiState)
         {

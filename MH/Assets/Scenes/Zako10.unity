@@ -127,6 +127,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5094469007369561305, guid: 2edd866c54e7e694f98b7c8f90e4fdc1,
+        type: 3}
+      propertyPath: m_Name
+      value: LoadObj
+      objectReference: {fileID: 0}
     - target: {fileID: 5094469007369561306, guid: 2edd866c54e7e694f98b7c8f90e4fdc1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -181,11 +186,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5094469007369561305, guid: 2edd866c54e7e694f98b7c8f90e4fdc1,
-        type: 3}
-      propertyPath: m_Name
-      value: LoadObj
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2edd866c54e7e694f98b7c8f90e4fdc1, type: 3}
@@ -350,13 +350,9 @@ MonoBehaviour:
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+BrainEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!81 &37764522
 AudioListener:
   m_ObjectHideFlags: 0
@@ -704,6 +700,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0068749f498baa64a8bd02be6c9d9695, type: 3}
 --- !u!114 &273049896 stripped
@@ -785,6 +786,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0068749f498baa64a8bd02be6c9d9695, type: 3}
 --- !u!114 &295259338 stripped
@@ -864,6 +870,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1205,6 +1216,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0068749f498baa64a8bd02be6c9d9695, type: 3}
 --- !u!114 &801128060 stripped
@@ -1284,6 +1300,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1507,6 +1528,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
+      propertyPath: clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2ca76ff494e0bf74499df4d465f8ed62, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c57717c713f5dc347bcdba67954c94da, type: 3}
 --- !u!1001 &1252366830
@@ -1574,6 +1600,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1655,6 +1686,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1790,8 +1826,6 @@ MonoBehaviour:
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls: []
-      m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 969851878}
 --- !u!4 &1344774249
@@ -1876,6 +1910,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0068749f498baa64a8bd02be6c9d9695, type: 3}
 --- !u!114 &1354223571 stripped
@@ -1955,6 +1994,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2577,6 +2621,11 @@ PrefabInstance:
     - target: {fileID: 8828224110624761445, guid: 0068749f498baa64a8bd02be6c9d9695,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828224110624761446, guid: 0068749f498baa64a8bd02be6c9d9695,
+        type: 3}
+      propertyPath: battleType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

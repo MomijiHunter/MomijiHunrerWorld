@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPower: 4
+  player: {fileID: 3094438344999436977}
   attackedEnemy: []
 --- !u!58 &486807396788426404
 CircleCollider2D:
