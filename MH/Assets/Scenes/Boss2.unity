@@ -843,6 +843,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 483afd76c319ab3448c09fa04bb4526c, type: 3}
+--- !u!114 &515968337 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 490454901717330936, guid: 483afd76c319ab3448c09fa04bb4526c,
+    type: 3}
+  m_PrefabInstance: {fileID: 515968336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5264e92dc56d4ea4594b7f9343c33a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &515968338 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9063150165703152002, guid: 483afd76c319ab3448c09fa04bb4526c,
+    type: 3}
+  m_PrefabInstance: {fileID: 515968336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5264e92dc56d4ea4594b7f9343c33a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &521430066
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,14 +1404,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
-      propertyPath: MaxHP
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
-      propertyPath: currentHP
-      value: 400
-      objectReference: {fileID: 0}
+    - target: {fileID: 4837123430888135026, guid: 364446e69a3e5d045b0c3010418bf8af,
+        type: 3}
+      propertyPath: nowMapParent
+      value: 
+      objectReference: {fileID: 515968338}
+
     - target: {fileID: 126467299, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
       propertyPath: dropItem
       value: 
@@ -1462,7 +1484,7 @@ PrefabInstance:
     - target: {fileID: 6071839816403992005, guid: 122cf5722c4da9f4f81abfe0c001eaf5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6071839816403992005, guid: 122cf5722c4da9f4f81abfe0c001eaf5,
         type: 3}
@@ -1998,7 +2020,7 @@ PrefabInstance:
     - target: {fileID: 8058035113647968811, guid: cf8a636594d32fb4c8e445cce2e346fe,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 8058035113647968811, guid: cf8a636594d32fb4c8e445cce2e346fe,
         type: 3}
@@ -2153,13 +2175,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4837123430888135026, guid: 364446e69a3e5d045b0c3010418bf8af,
+        type: 3}
+      propertyPath: nowMapParent
+      value: 
+      objectReference: {fileID: 515968337}
     - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
       propertyPath: MaxHP
-      value: 400
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
       propertyPath: currentHP
-      value: 400
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 126467299, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
       propertyPath: dropItem

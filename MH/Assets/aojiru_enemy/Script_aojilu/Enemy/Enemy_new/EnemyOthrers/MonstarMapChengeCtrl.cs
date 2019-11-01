@@ -17,7 +17,7 @@ namespace aojilu
         float nextMapChengeLength;
         float mapChengeStartTime;
 
-        [SerializeField]MapParent nowMapParent;
+        [SerializeField]public MapParent nowMapParent;
         LoadObject nextLoadObject;
 
         private void Awake()

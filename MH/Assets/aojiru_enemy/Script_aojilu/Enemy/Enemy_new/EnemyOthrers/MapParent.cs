@@ -9,6 +9,7 @@ namespace aojilu
     public class MapParent : MonoBehaviour
     {
         [SerializeField] LoadObject[] loadObjects;
+        [SerializeField] public Transform centerPos;
 
         /// <summary>
         /// 自分の所持しているマップオブジェクトからランダムに1つ返す

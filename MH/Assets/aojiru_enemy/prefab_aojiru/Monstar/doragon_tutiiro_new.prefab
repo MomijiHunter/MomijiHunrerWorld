@@ -1019,7 +1019,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4470582044274018869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.49, y: 6.96, z: 0}
+  m_LocalPosition: {x: -7.5, y: 6.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8828224110624761445}
@@ -2176,8 +2176,7 @@ GameObject:
   - component: {fileID: 8828224110624761446}
   - component: {fileID: 8828224110624761449}
   - component: {fileID: 8828224110624761450}
-  - component: {fileID: 1678059035969596066}
-  - component: {fileID: 8447272542400530085}
+  - component: {fileID: 1265112383832154515}
   m_Layer: 0
   m_Name: doragon_tutiiro_new
   m_TagString: Enemy
@@ -2376,8 +2375,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 5042119498694098170}
-  MaxHP: 30
-  currentHP: 30
+  MaxHP: 25
+  currentHP: 25
   stateLog: 0
   nonActive: 0
   battleType: 1
@@ -2423,7 +2422,7 @@ MonoBehaviour:
   effectPrefabs:
   - {fileID: 5594735719244740372, guid: 027492f02fd64c34aa2b34019873bbb0, type: 3}
   - {fileID: 1649059229763613085, guid: 737c14308b4c51a4e920eb84740bb5cd, type: 3}
---- !u!114 &1678059035969596066
+--- !u!114 &1265112383832154515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2439,7 +2438,6 @@ MonoBehaviour:
   dropPos: {fileID: 3243430715018999077}
   dropItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
     type: 3}
---- !u!114 &8447272542400530085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
