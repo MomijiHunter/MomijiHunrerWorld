@@ -65,6 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
@@ -89,13 +91,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectable: 1
   sleep: 0
+  additionalAction:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   text: {fileID: 6961448616974977521}
   color_select: {r: 0, g: 0, b: 0, a: 1}
   color_cantSelect: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   color_sleep: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   image: {fileID: 5696808629626604677}
   color_select_image: {r: 0.39076954, g: 1, b: 0.3537736, a: 0.48235294}
-  targetUIIndex: 0
+  myData:
+    targetUIIndex: 0
 --- !u!1 &5269964777147210919
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,6 +167,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 24

@@ -68,7 +68,7 @@ public class EnemyController : CharBase
     }
     protected virtual void Init()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player = GameObject.Find("PlayerAll").GetComponent<Player>();
         plTr = player.transform;
         tr = transform;
         animator = GetComponent<Animator>();
