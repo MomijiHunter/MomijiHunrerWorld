@@ -187,6 +187,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4837123430888135026, guid: 364446e69a3e5d045b0c3010418bf8af,
+        type: 3}
+      propertyPath: nowMapParent
+      value: 
+      objectReference: {fileID: 50705338}
     - target: {fileID: 126467298, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
       propertyPath: MaxHP
       value: 500
@@ -195,11 +200,6 @@ PrefabInstance:
       propertyPath: currentHP
       value: 500
       objectReference: {fileID: 0}
-    - target: {fileID: 4837123430888135026, guid: 364446e69a3e5d045b0c3010418bf8af,
-        type: 3}
-      propertyPath: nowMapParent
-      value: 
-      objectReference: {fileID: 50705338}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 364446e69a3e5d045b0c3010418bf8af, type: 3}
 --- !u!114 &31689850 stripped
@@ -421,13 +421,9 @@ MonoBehaviour:
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+BrainEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1189,8 +1185,6 @@ MonoBehaviour:
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls: []
-      m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1133869865}
 --- !u!4 &1765182324
@@ -1346,9 +1340,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
         type: 3}
+      propertyPath: targets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 31689850}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c57717c713f5dc347bcdba67954c94da, type: 3}
 --- !u!1001 &2100803998

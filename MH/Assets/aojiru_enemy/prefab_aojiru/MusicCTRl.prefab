@@ -142,8 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeState: 0
   clips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 2ca76ff494e0bf74499df4d465f8ed62, type: 3}
   - {fileID: 8300000, guid: 717e21294973bb84281acb48a2a0a2ca, type: 3}
   upSpeed: -1
   downSpeed: 1
-  target: {fileID: 0}
+  targets: []

@@ -2177,6 +2177,7 @@ GameObject:
   - component: {fileID: 8828224110624761449}
   - component: {fileID: 8828224110624761450}
   - component: {fileID: 1678059035969596066}
+  - component: {fileID: 8447272542400530085}
   m_Layer: 0
   m_Name: doragon_tutiiro_new
   m_TagString: Enemy
@@ -2438,3 +2439,16 @@ MonoBehaviour:
   dropPos: {fileID: 3243430715018999077}
   dropItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
     type: 3}
+--- !u!114 &8447272542400530085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8828224110624761447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f51e0ba6fba3194b903ceb289438333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadLength: 10
