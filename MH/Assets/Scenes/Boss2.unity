@@ -170,8 +170,6 @@ MonoBehaviour:
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls: []
-      m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1261545141}
 --- !u!4 &112533760
@@ -327,9 +325,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
         type: 3}
+      propertyPath: targets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 1835738810}
+    - target: {fileID: 2119527826194008087, guid: c57717c713f5dc347bcdba67954c94da,
+        type: 3}
+      propertyPath: targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 1178911788}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c57717c713f5dc347bcdba67954c94da, type: 3}
 --- !u!1001 &281707335
@@ -1057,13 +1070,9 @@ MonoBehaviour:
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+BrainEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!81 &773120821
 AudioListener:
   m_ObjectHideFlags: 0
