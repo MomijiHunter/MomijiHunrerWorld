@@ -803,9 +803,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkActive: 1
   internalTarget: 0
   tags:
   - Player
+  debug_colEnable: 0
 --- !u!61 &4837123429800991222
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -830,7 +832,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 33.76062, y: 10}
+  m_Size: {x: 33.76062, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &4837123430033961849
 GameObject:
@@ -921,8 +923,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4837123430195163150}
-  - component: {fileID: 4837123430195163148}
   - component: {fileID: 4837123430195163149}
+  - component: {fileID: 2755198434083295292}
   m_Layer: 0
   m_Name: detectKeep
   m_TagString: Untagged
@@ -944,21 +946,6 @@ Transform:
   m_Father: {fileID: 4837123429570131126}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4837123430195163148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4837123430195163151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  internalTarget: 0
-  tags:
-  - Player
 --- !u!61 &4837123430195163149
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -985,6 +972,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 300, y: 60}
   m_EdgeRadius: 0
+--- !u!114 &2755198434083295292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837123430195163151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed97a039d6d2df4f9ce76b0cae1267e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkActive: 1
+  internalTarget: 0
+  checkCollider: {fileID: 4837123430195163149}
+  checkDistance: {x: 0, y: 0}
+  checkTarget: {fileID: 0}
+  isTargetPlayer: 1
+  debug_colliderEnable: 0
 --- !u!1 &4837123430791713593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,6 +1066,7 @@ GameObject:
   - component: {fileID: 4837123430888135025}
   - component: {fileID: 126467298}
   - component: {fileID: 126467299}
+  - component: {fileID: 7977327104112287066}
   m_Layer: 0
   m_Name: doragon_sorairo
   m_TagString: Enemy
@@ -1326,7 +1333,7 @@ MonoBehaviour:
   preDetectLength: 60
   eyeCheckArea: {fileID: 4837123429800991221}
   eyeCheckArea_canHide: {fileID: 1651059594669547448}
-  detectCheckArea: {fileID: 4837123430195163148}
+  detectCheckArea: {fileID: 2755198434083295292}
   moveSpeed: 15
   footCollider: {fileID: 4837123430791713575}
   myMomiji: {fileID: 432581240272056551}
@@ -1349,6 +1356,19 @@ MonoBehaviour:
   myCharcter: {fileID: 126467298}
   dropPos: {fileID: 3406262064618478272}
   dropItem: {fileID: 0}
+--- !u!114 &7977327104112287066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837123430888135024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f51e0ba6fba3194b903ceb289438333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadLength: 15
 --- !u!1 &4837123431225832326
 GameObject:
   m_ObjectHideFlags: 0
@@ -2114,9 +2134,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkActive: 1
   internalTarget: 0
   tags:
   - Player
+  debug_colEnable: 0
 --- !u!61 &6480699696286058337
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2141,7 +2163,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 16.923706, y: 10}
+  m_Size: {x: 16.923706, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &7882668878032570543
 GameObject:
