@@ -91,7 +91,7 @@ Transform:
   m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
   m_Children: []
   m_Father: {fileID: 5042119498557981646}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4316434375495563978
 MonoBehaviour:
@@ -105,9 +105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkActive: 1
   internalTarget: 0
   tags:
   - Player
+  debug_colEnable: 0
 --- !u!61 &5784011003712251029
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,7 +134,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 15.602662, y: 10}
+  m_Size: {x: 15.602662, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &1482278543722821261
 GameObject:
@@ -1302,9 +1304,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkActive: 1
   internalTarget: 0
   tags:
   - Player
+  debug_colEnable: 0
 --- !u!61 &5042119498286870091
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1329,7 +1333,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 40, y: 10}
+  m_Size: {x: 40, y: 20}
   m_EdgeRadius: 0
 --- !u!1 &5042119498380063392
 GameObject:
@@ -1504,8 +1508,8 @@ Transform:
   - {fileID: 5042119498380063393}
   - {fileID: 5042119498792375860}
   - {fileID: 5042119498286870090}
-  - {fileID: 5042119499177562165}
   - {fileID: 1041915214357351457}
+  - {fileID: 5042119499177562165}
   m_Father: {fileID: 8828224110624761445}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1575,8 +1579,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5042119499177562165}
-  - component: {fileID: 5042119499177562167}
   - component: {fileID: 5042119499177562166}
+  - component: {fileID: 3838151173714160659}
   m_Layer: 0
   m_Name: detectKeep
   m_TagString: Untagged
@@ -1596,23 +1600,8 @@ Transform:
   m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
   m_Children: []
   m_Father: {fileID: 5042119498557981646}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5042119499177562167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5042119499177562164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d9f5fd7cbb4e84493c6d860ddd1623, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  internalTarget: 0
-  tags:
-  - Player
 --- !u!61 &5042119499177562166
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1639,6 +1628,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 150, y: 60}
   m_EdgeRadius: 0
+--- !u!114 &3838151173714160659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5042119499177562164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed97a039d6d2df4f9ce76b0cae1267e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkActive: 1
+  internalTarget: 0
+  checkCollider: {fileID: 5042119499177562166}
+  checkDistance: {x: 0, y: 0}
+  checkTarget: {fileID: 0}
+  isTargetPlayer: 1
+  debug_colliderEnable: 0
 --- !u!1 &5042119499574284319
 GameObject:
   m_ObjectHideFlags: 0
@@ -2177,6 +2185,7 @@ GameObject:
   - component: {fileID: 8828224110624761449}
   - component: {fileID: 8828224110624761450}
   - component: {fileID: 1265112383832154515}
+  - component: {fileID: 2563164759953274220}
   m_Layer: 0
   m_Name: doragon_tutiiro_new
   m_TagString: Enemy
@@ -2384,7 +2393,7 @@ MonoBehaviour:
   preDetectLength: 30
   eyeCheckArea: {fileID: 5042119498286870092}
   eyeCheckArea_canHide: {fileID: 4316434375495563978}
-  detectCheckArea: {fileID: 5042119499177562167}
+  detectCheckArea: {fileID: 3838151173714160659}
   moveSpeed: 10
   footCollider: {fileID: 5042119498792375861}
   myMomiji: {fileID: 7988901225329313932}
@@ -2438,6 +2447,7 @@ MonoBehaviour:
   dropPos: {fileID: 3243430715018999077}
   dropItem: {fileID: 4063974487708827854, guid: ca387c3d6474dd543bb8399bccfdd67a,
     type: 3}
+--- !u!114 &2563164759953274220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

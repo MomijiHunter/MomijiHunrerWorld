@@ -47,9 +47,9 @@ public class EnemyController : CharBase
     #endregion
 
     #region TagCheckArea
-    [SerializeField] protected TagCheckArea eyeCheckArea;
-    [SerializeField] protected TagCheckArea eyeCheckArea_canHide;
-    [SerializeField] protected TagCheckArea detectCheckArea;
+    [SerializeField] protected AbstractCheckInternalArea eyeCheckArea;
+    [SerializeField] protected AbstractCheckInternalArea eyeCheckArea_canHide;
+    [SerializeField] protected AbstractCheckInternalArea detectCheckArea;
     #endregion
 
     [SerializeField] protected float moveSpeed;
