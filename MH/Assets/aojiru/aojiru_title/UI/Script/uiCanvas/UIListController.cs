@@ -17,7 +17,7 @@ public class UIListController : MonoBehaviour
     [SerializeField] float repeatDelay;
     public float RepeatDelay { get { return repeatDelay; } }
 
-    private void Start()
+    private void Awake()
     {
         SetUIList();
 
@@ -79,4 +79,5 @@ public class UIListController : MonoBehaviour
     {
         UIList[index].SleepUICanvas();
     }
+    
 }
